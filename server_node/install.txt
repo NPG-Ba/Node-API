@@ -1,0 +1,7 @@
+Tao file config:  sequelize init:config
+
+Tao file models:  sequelize init:models
+
+tao file model : sequelize model:create --name Task --attributes "name:string, done:boolean, description:text"
+
+create table : sequelize db:migrate
