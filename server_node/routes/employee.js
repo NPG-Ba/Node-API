@@ -5,20 +5,20 @@ const EmployeeController = require('../controllers/employee.js');
 
 /* GET all page. */
 
-router.get('/', EmployeeController.get_emp);
+router.get('/:page(\\d+)', EmployeeController.get_emp);
 
 /* GET all id. */
-router.get('/:id', EmployeeController.get_id);
+router.get('/emp_id/:id(\\d+)', EmployeeController.get_id);
 
 /*Create  a emp */
 router.post('/', EmployeeController.add_emp);
 
 /*Update data in DB */
 
-router.put('/:id', EmployeeController.update_emp)
+router.put('/:id(\\d+)',EmployeeController.update_emp)
 
 /*Delete data in DB */
 
-router.delete('/:id', EmployeeController.delete_emp)
+router.delete('/:id(\\d+)', EmployeeController.delete_emp)
 
 module.exports = router;
