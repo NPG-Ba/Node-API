@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "root@1234",
+    "password": "123456",
     "database": "empdb",
     "host": "localhost",
     "dialect": "mysql",
@@ -25,3 +25,4 @@
   }
 }
 
+  

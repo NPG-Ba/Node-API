@@ -3,7 +3,7 @@ const err = require('../models/response/codes.js')
 const EmployeeService = require('../services/employee.js');
 const Joi = require('joi');
 const validate = require('../validate/emp_validate.js');
-//const emp = require('../models/view_model/employee')
+const config = require('../config')
 
 module.exports = {
 
@@ -11,7 +11,8 @@ module.exports = {
 
     get_emp: async (req, res, next) => {
 
-        let limit = 5;   
+        let limit = config.page_limit;   
+
         // number of records per page
         let offset = 0;
         
@@ -21,6 +22,13 @@ module.exports = {
         // Total records
 
         let page = req.params.page;      // page number current
+
+        //check page
+        if(page == 0 | page ==null | page ==NaN) 
+        {
+            page = 1;
+        }
+  
 
         const pages = Math.ceil(parseInt(page_current) / parseInt(limit)); // Total page 
         offset = limit * (page - 1);
