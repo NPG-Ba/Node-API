@@ -1,0 +1,4 @@
+{"message":"::1 - - [02/Jan/2019:17:01:56 +0000] \"GET /employee/1 HTTP/1.1\" 200 1349 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36\"\n","level":"info"}
+{"message":"::1 - - [02/Jan/2019:17:03:58 +0000] \"GET /employee/1 HTTP/1.1\" 200 1349 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36\"\n","level":"info"}
+{"message":"::ffff:127.0.0.1 - - [02/Jan/2019:17:11:45 +0000] \"GET /employee/1 HTTP/1.1\" 200 1349 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36\"\n","level":"info"}
+{"message":"::1 - - [02/Jan/2019:17:12:21 +0000] \"GET /employee/1 HTTP/1.1\" 200 1349 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36\"\n","level":"info"}

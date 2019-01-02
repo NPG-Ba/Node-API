@@ -29,6 +29,16 @@
             "date": 1546423878338,
             "name": "logs\\report-2019-01-02-17.log",
             "hash": "db6b4e991c8e2d54d9812c165a93bba4"
+        },
+        {
+            "date": 1546446215217,
+            "name": "logs\\report-2019-01-02-23.log",
+            "hash": "636fd2545314abe72457a39e1946c756"
+        },
+        {
+            "date": 1546448515572,
+            "name": "logs\\report-2019-01-03-00.log",
+            "hash": "46c4868be7c0d94e8f28fc2bf724f09c"
         }
     ]
 }

@@ -10,7 +10,9 @@ module.exports = {
     // get all employee
 
     get_emp: async (req, res, next) => {
-
+        const ip = res.socket.remoteAddress;
+        console.log(ip)
+        //if (req.params.id === '0') next('route')
         let limit = config.page_limit;   
 
         // number of records per page

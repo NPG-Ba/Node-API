@@ -25,7 +25,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+
+// set header
+app.use(cors({
+  
+    "allowedOrigin": "*",
+    "allowedMethods": "GET,POST,PUT,OPTIONS,DELETE,PATCH",
+    "allowedHeaders": ["Accept", "Authorization", "Content-Type", "Origin", "X-Requested-With"],
+    "exposedHeaders": ['Authorization','Content-Length', 'X-Foo', 'X-Bar'],
+    "credentials": true
+  
+}));
+//app.options("*", cors(options));
 
 // setting Router 
 app.use('/', indexRouter);
@@ -45,7 +56,8 @@ app.use(function(err, req, res, next) {
 
 // add this line to include winston logging
 winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
-
+const ip = res.socket.remoteAddress;
+console.log(ip)
   // render the error page
   res.status(err.status || 500);
   res.render('error');
