@@ -14,6 +14,21 @@
             "date": 1546413101130,
             "name": "logs\\report-2019-01-02-14.log",
             "hash": "035d99e0683861fbae91a7d5a423d5e2"
+        },
+        {
+            "date": 1546416040978,
+            "name": "logs\\report-2019-01-02-15.log",
+            "hash": "1184d46acb2b9d58b7f534cb181d729a"
+        },
+        {
+            "date": 1546422768017,
+            "name": "logs\\report-2019-01-02-16.log",
+            "hash": "ae2383f0df0fdfde630d43cc6c03f157"
+        },
+        {
+            "date": 1546423878338,
+            "name": "logs\\report-2019-01-02-17.log",
+            "hash": "db6b4e991c8e2d54d9812c165a93bba4"
         }
     ]
 }

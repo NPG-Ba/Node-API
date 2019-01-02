@@ -21,4 +21,8 @@ router.put('/:id(\\d+)',EmployeeController.update_emp)
 
 router.delete('/:id(\\d+)', EmployeeController.delete_emp)
 
+
+router.put('/age/:id(\\d+)', EmployeeController.update_age)
+
+
 module.exports = router;

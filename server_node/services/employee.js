@@ -38,5 +38,12 @@ module.exports = {
                 comment : data.comment ? data.comment : e.comment
             })
         })
+    },
+    update_age_id: (emp,input_age) => {
+        emp.forEach((e) => {
+            e.update({
+                age: input_age
+            })
+        })
     }
 }
