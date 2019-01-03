@@ -3,13 +3,13 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-var cors = require('cors');
-
+const cors = require('cors');
+import AppConf from './config/application';
 
 //setting router
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const employeeRouter = require('./routes/employee');
+import indexRouter from './routes/index';
+import usersRouter from'./routes/users';
+import employeeRouter from'./routes/employee';
 const app = express();
 
 // setting Log
@@ -28,34 +28,34 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // set header
 app.use(cors({
-  
-    "allowedOrigin": "*",
-    "allowedMethods": "GET,POST,PUT,OPTIONS,DELETE,PATCH",
-    "allowedHeaders": ["Accept", "Authorization", "Content-Type", "Origin", "X-Requested-With"],
-    "exposedHeaders": ['Authorization','Content-Length', 'X-Foo', 'X-Bar'],
-    "credentials": true
-  
+  "allowedOrigin": AppConf.cors.allowedOrigin,
+  "allowedMethods": AppConf.cors.allowedMethods,
+  "allowedHeaders": AppConf.cors.allowedHeaders,
+  "exposedHeaders": AppConf.cors.exposedHeaders,
+  "credentials": AppConf.cors.credentials
 }));
-
+//app.options("*", cors(options));
 
 // setting Router 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/employee',employeeRouter);
+app.use('/employee', employeeRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-// add this line to include winston logging
-winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  // add this line to include winston logging
+  winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+  const ip = res.socket.remoteAddress;
+  console.log(ip)
   // render the error page
   res.status(err.status || 500);
   res.render('error');
