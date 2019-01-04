@@ -29,8 +29,8 @@ export function deletePersonById(id) {
     if (db.Person.destroy({where: {id: id}})) return true;
     return false;
 }
-export function updatePersonById(emp, data) {
-    emp.forEach((e) => {
+export function updatePersonById(person, data) {
+    person.forEach((e) => {
         e.update({
             name: data.name ? data.name : e.name,
             age: data.age ? data.age : e.age,
@@ -38,8 +38,8 @@ export function updatePersonById(emp, data) {
         });
     });
 }
-export function updateAgePersonById(emp, input_age) {
-    emp.forEach((e) => {
+export function updateAgePersonById(person, input_age) {
+    person.forEach((e) => {
         e.update({
             age: input_age
         });
