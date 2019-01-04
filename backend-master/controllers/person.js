@@ -19,9 +19,9 @@ module.exports = {
         const data = await PersonService.getCountPerson(); 
         let page_current = data.count; 
         // Total records
-
-        let page = 1; // xet page mac dinh
-
+        let page = req.params.page;      // page number current
+        //check page
+        page = page === undefined ? (page=1) : (page)
         const pages = Math.ceil(parseInt(page_current) / parseInt(limit)); // Total page 
         offset = limit * (page - 1);
 
@@ -47,40 +47,40 @@ module.exports = {
             });
         }
     },
-    getAllPersonByWhere: async (req, res, next) => {
+    // getAllPersonByWhere: async (req, res, next) => {
 
-        //if (req.params.id === '0') next('route')
-        let limit = AppConf.page.default;   
+    //     //if (req.params.id === '0') next('route')
+    //     let limit = AppConf.page.default;   
 
-        // number of records per page
-        let offset = 0;
+    //     // number of records per page
+    //     let offset = 0;
         
-     // page number current
-        let id = req.params.person;  
+    //  // page number current
+    //     let id = req.params.person;  
 
-    let pages = 4;
+    // let pages = 4;
 
-        try {
-            // Gọi service
-            const emp = await PersonService.getAllPersonWhereById(limit,offset,8);
-            // trả về res
-            if (emp.length > 0) {
-                res.status(CodeAPI[200]).send({
-                    data: emp,
-                    length: emp.length,
-                    pages: pages
-                });
-            } else {
-                res.status(CodeAPI[204]).send({
-                    message: 'No data'
-                });
-            }
-        } catch (error) {
-            res.status(CodeAPI[500]).send({
-                message: error.message
-            });
-        }
-    },
+    //     try {
+    //         // Gọi service
+    //         const emp = await PersonService.getAllPersonWhereById(limit,offset,8);
+    //         // trả về res
+    //         if (emp.length > 0) {
+    //             res.status(CodeAPI[200]).send({
+    //                 data: emp,
+    //                 length: emp.length,
+    //                 pages: pages
+    //             });
+    //         } else {
+    //             res.status(CodeAPI[204]).send({
+    //                 message: 'No data'
+    //             });
+    //         }
+    //     } catch (error) {
+    //         res.status(CodeAPI[500]).send({
+    //             message: error.message
+    //         });
+    //     }
+    // },
     getByIdPerson: async (req, res) => {
         //get emp với id
                 let emp = await PersonService.getPersonById(parseInt(req.params.id));
