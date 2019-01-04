@@ -1,30 +1,35 @@
 import db from '../db/models';
 
-export function getCountEmp() {
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
+
+export function getCountPerson() {
     const data = db.Person.findAndCountAll();
     return data;
 }
-export function getAllEmp(limit, offset) {
+export function getAllPerson(limit, offset) {
     return db.Person.findAll({ offset: offset, limit: limit,order: [['id', 'DESC']] });
 }
-export function getById(id) {
+export function getAllPersonWhereById(limit, offset,id) {
+    return db.Person.findAll({where: {
+        id: {
+          [Op.lt]: id
+        }
+      }, offset: offset, limit: limit,order: [['id', 'DESC']] });
+}
+export function getPersonById(id) {
     return db.Person.findAll({where: {id: id}});
 }
-export function addNewEmp(data) {
+export function addNewPerson(data) {
     if (db.Person.create(data))
         return true;
     return false;
 }
-export function deleteById(id) {
-    if (db.Person.destroy({
-        where: {
-            id: id
-        }
-    }))
-        return true;
+export function deletePersonById(id) {
+    if (db.Person.destroy({where: {id: id}})) return true;
     return false;
 }
-export function updateById(emp, data) {
+export function updatePersonById(emp, data) {
     emp.forEach((e) => {
         e.update({
             name: data.name ? data.name : e.name,
@@ -33,7 +38,7 @@ export function updateById(emp, data) {
         });
     });
 }
-export function updateAgeById(emp, input_age) {
+export function updateAgePersonById(emp, input_age) {
     emp.forEach((e) => {
         e.update({
             age: input_age

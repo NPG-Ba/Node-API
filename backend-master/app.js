@@ -9,7 +9,7 @@ import AppConf from './config/application';
 //setting router
 import indexRouter from './routes/index';
 import usersRouter from'./routes/users';
-import employeeRouter from'./routes/employee';
+import personRouter from'./routes/person';
 const app = express();
 
 // setting Log
@@ -34,12 +34,11 @@ app.use(cors({
   "exposedHeaders": AppConf.cors.exposedHeaders,
   "credentials": AppConf.cors.credentials
 }));
-//app.options("*", cors(options));
 
 // setting Router 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/employee', employeeRouter);
+app.use('/person', personRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

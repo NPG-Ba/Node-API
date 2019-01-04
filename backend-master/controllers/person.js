@@ -1,14 +1,53 @@
 import Person from '../db/models/person';
-import * as EmployeeService from '../services/employee.js';
+import * as PersonService from '../services/person.js';
 import * as Joi from 'joi';
 import * as Validate from '../models/validate/emp_validate';
 import AppConf from '../config/application';
 import CodeAPI from '../models/response/codes';
+
 module.exports = {
 
-    // get all employee
+    // get all person
 
-     getAllEmployee: async (req, res, next) => {
+     getAllPerson: async (req, res, next) => {
+        let limit = AppConf.page.default;   
+
+        // number of records per page
+        let offset = 0;
+        
+        // call service get all emp
+        const data = await PersonService.getCountPerson(); 
+        let page_current = data.count; 
+        // Total records
+
+        let page = 1; // xet page mac dinh
+
+        const pages = Math.ceil(parseInt(page_current) / parseInt(limit)); // Total page 
+        offset = limit * (page - 1);
+
+        try {
+            // Gọi service
+            const emp = await PersonService.getAllPerson(limit,offset);
+            // trả về res
+            if (emp.length > 0) {
+                res.status(CodeAPI[200]).send({
+                    data: emp,
+                    length: emp.length,
+                    pages: pages
+                });
+            } else {
+                res.status(CodeAPI[204]).send({
+                    message: 'No data',
+                    data : {}
+                });
+            }
+        } catch (error) {
+            res.status(CodeAPI[500]).send({
+                message: error.message
+            });
+        }
+    },
+    getAllPersonByWhere: async (req, res, next) => {
 
         //if (req.params.id === '0') next('route')
         let limit = AppConf.page.default;   
@@ -16,24 +55,14 @@ module.exports = {
         // number of records per page
         let offset = 0;
         
-        // call service get all emp
-        const data = await EmployeeService.getCountEmp(); 
-        let page_current = data.count; 
-        // Total records
+     // page number current
+        let id = req.params.person;  
 
-        let page = req.params.page;      // page number current
-
-        //check page
-        if(page == 0 | page ==null | page ==NaN) 
-        {
-            page = 1;
-        }
-        const pages = Math.ceil(parseInt(page_current) / parseInt(limit)); // Total page 
-        offset = limit * (page - 1);
+    let pages = 4;
 
         try {
             // Gọi service
-            const emp = await EmployeeService.getAllEmp(limit,offset);
+            const emp = await PersonService.getAllPersonWhereById(limit,offset,8);
             // trả về res
             if (emp.length > 0) {
                 res.status(CodeAPI[200]).send({
@@ -52,9 +81,9 @@ module.exports = {
             });
         }
     },
-    getByIdEmployee: async (req, res) => {
+    getByIdPerson: async (req, res) => {
         //get emp với id
-                let emp = await EmployeeService.getById(parseInt(req.params.id));
+                let emp = await PersonService.getPersonById(parseInt(req.params.id));
                 if (emp.length > 0) {
                     res.status(CodeAPI[200]).send({
                         data: emp,
@@ -68,7 +97,7 @@ module.exports = {
     },
     // add a new employeee
 
-    addNewEmployee: async (rep, res) => {
+    addNewPerson: async (rep, res) => {
         let data = rep.body;
 
         // validate input
@@ -78,7 +107,7 @@ module.exports = {
         });
         if (result) {
             try {
-                let isNewRecord = await EmployeeService.addNewEmp(data);
+                let isNewRecord = await PersonService.addNewPerson(data);
                 if (isNewRecord) {
 
                     res.status(CodeAPI[200]).send({
@@ -104,7 +133,7 @@ module.exports = {
 
     // update employee
 
-    updateEmployee: async (rep, res) => {
+    updatePerson: async (rep, res) => {
         const data = rep.body;
 
         const id = rep.params.id;
@@ -116,13 +145,9 @@ module.exports = {
         if(result)
         {
             try {
-                let emp = await Person.findAll({
-                    where: {
-                        id
-                    }
-                });
+                let emp = await PersonService.getPersonById(id);
                 if (emp.length > 0) {
-                   await EmployeeService.updateById(emp,data);
+                   await PersonService.updatePersonById(emp,data);
                     res.status(CodeAPI[200]).send({
                         data: emp
                     });
@@ -143,18 +168,15 @@ module.exports = {
 
     // delete employee
 
-    deleteEmployee: async (rep, res) => {
+    deletePerson: async (rep, res) => {
         const id =rep.params.id;
             try {
                 // Check emp with id  = ?
-                const emp = await EmployeeService.getById(id);
+                const emp = await PersonService.getPersonById(id);
 
                 if (emp.length > 0) {
-
                     // call function Delete emp
-
-                    let isDelete = await EmployeeService.deleteById(id);
-
+                    let isDelete = await PersonService.deletePersonById(id);
                     if (isDelete) {
                         res.status(CodeAPI[200]).send({
                             message: isDelete
@@ -175,20 +197,16 @@ module.exports = {
                 });
             }
     },
-    updateAgeEmployee : async (rep,res) =>{
-        
+    updateAgePerson : async (rep,res) =>{
+
         const id = rep.params.id;
-        let emp = await Person.findAll({
-            where: {
-                id
-            }
-        });
+        let emp = await PersonService.getPersonById(id);
 
         let age = emp[0].age + 1;
 
         if(age <= 120){
             try {
-                await EmployeeService.updateAgeById(emp,age);
+                await PersonService.updateAgePersonById(emp,age);
                     res.status(CodeAPI[200]).send({
                         result: true
                     });

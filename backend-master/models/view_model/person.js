@@ -1,4 +1,4 @@
-const employee = class { 
+var person = class { 
     constructor(name,age,comment) { 
        this.name = name; 
        this.age = age; 
