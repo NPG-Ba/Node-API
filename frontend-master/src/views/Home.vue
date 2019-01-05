@@ -2,7 +2,7 @@
 	<div class="home">
 		<div class="container">
 			<div class="row">
-				<div class="col-6 offset-md-3">
+				<div class="col-12">
 					<FormComponent></FormComponent>
 				</div>
 			</div>
@@ -27,13 +27,4 @@ import ListTable from '@/components/ListTable.vue';
 })
 export default class Home extends Vue {}
 </script>
-<style lang="scss">
-  .form-group{
-    p{
-     width: 100%;
-    margin-top: .25rem;
-    font-size: 80%;
-    color: #dc3545;
-    }
-  }
-</style>
+

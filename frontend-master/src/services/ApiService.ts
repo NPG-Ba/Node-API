@@ -5,14 +5,17 @@ import axios from 'axios';
 
 export class ApiService {
     public static init(baseURL: string) {
+        console.log(baseURL);
         axios.defaults.baseURL = baseURL;
     }
 
     public static get(url: string, params: any) {
+        console.log(url);
         return axios.get(url, params);
     }
 
     public static post(resource: any, data: any) {
+        
         return axios.post(resource, data);
     }
 
@@ -20,7 +23,7 @@ export class ApiService {
         return axios.put(resource, data);
     }
 
-    public static delete(resource: any) {
-        return axios.delete(resource);
+    public static delete(url: string, params: any) {
+        return axios.delete(url,params);
     }
 }

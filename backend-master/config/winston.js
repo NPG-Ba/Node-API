@@ -1,6 +1,6 @@
-import * as _FS from 'fs';
-import AppConf from './application';
-import * as winston from 'winston';
+import * as _FS from 'fs'
+import AppConf from './application'
+import * as winston from 'winston'
 
 require('winston-daily-rotate-file');
 
@@ -12,24 +12,25 @@ require('winston-daily-rotate-file');
 
     // Cấu hình file log
     var transport = new (winston.transports.DailyRotateFile)({
-    filename: `${AppConf.folder.logDir}`.concat(AppConf.file.filename),
-    datePattern: AppConf.file.datePattern,
-    zippedArchive: AppConf.file.zippedArchive,
-    handleExceptions: AppConf.file.handleExceptions,
-    maxSize: AppConf.file.maxSize,
-    maxFiles: AppConf.file.maxFiles
+
+        filename: `${AppConf.folder.logDir}`.concat(AppConf.file.filename),
+        datePattern: AppConf.file.datePattern,
+        zippedArchive: AppConf.file.zippedArchive,
+        handleExceptions: AppConf.file.handleExceptions,
+        maxSize: AppConf.file.maxSize,
+        maxFiles: AppConf.file.maxFiles
     });
 
     transport.on('rotate', function(oldFilename, newFilename) {
-    // do something fun
-    console.log(new Date(), oldFilename, newFilename)
+                // do something fun
+                console.log(new Date(), oldFilename, newFilename)
     });
 
     var logger = winston.createLogger({
     transports: [
-        transport
-    ],
-    exitOnError: false,
+                    transport
+                ],
+                exitOnError: false,
     });
 
     logger.stream = {

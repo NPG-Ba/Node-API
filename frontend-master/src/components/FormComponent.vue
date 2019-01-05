@@ -1,58 +1,60 @@
 <template>
-  <div>
-    <h1>Person Form</h1>
-    <div
-      class='alert'
-      v-bind:class='{ "alert-success": saveStatue, "alert-warning": !saveStatue }'
-      role='alert'
-      v-show='saveStatue !== null'
-    >{{saveMessage}}</div>
-    <form @submit.prevent='onSubmit' autocomplete='false' name="form">
-      <div class='form-group'>
-        <label>Name</label>
-        <input
-          class='form-control'
-          name='name'
-          type='text'
-          v-model='name'
-          v-validate='{ required: true, max: 10 }'
-          autocomplete='false'
-        >
-        <p v-if='errors.has("name")'>{{ errors.first("name") }}</p>
+  <div class="row justify-content-md-center">
+    <div class="col-8">
+      <h1 style="text-align: center;">Person From </h1>
+        <p class='alert'
+              v-bind:class='{ "alert-success": saveStatue, "alert-warning": !saveStatue }'
+              role='alert'
+              v-show='saveStatue !== null'>
+              {{saveMessage}}
+        </p>
+        <form @submit.prevent='onSubmit' 
+                autocomplete='false' 
+                name="form"
+                @reset="onReset"
+                v-if="show">
+              <div class="row justify-content-md-left">
+                <div class="col-6">
+                <b-form-group label='Name'>
+                  <b-input type='text'
+                                v-model='name'
+                                v-validate='{ required: true, max: 10 }'
+                                autocomplete='false'
+                    />
+                  <p v-if='errors.has("name")'>{{ errors.first("name") }}</p>
+                </b-form-group>
+                <b-form-group label='Age'>
+                  <b-input type='number' 
+                                v-model='age' 
+                                v-validate='{ required: true }'
+                                min='18'
+                                max='120'
+                                name='age'
+                    />
+                  <p v-if='errors.has("age")'>{{ errors.first('age') }}</p>
+                </b-form-group>
+                </div>
+              </div>
+          <b-form-group  label='Comment'>
+            <b-form-textarea id="textarea1"
+                              v-model='comment'
+                              placeholder="Enter something"
+                              :rows="3"
+                              :max-rows="6"
+                              v-validate='"required"' name='comment'>
+              </b-form-textarea>
+              <p v-if='errors.has("comment")'>{{ errors.first("comment") }}</p>
+          </b-form-group >
+            <div class="justify-content-center">
+                  <b-button type='submit' :disabled='errors.any()' v-show='!isLoading'>Submit</b-button>
+                      <button class='btn btn-primary' type='button' v-on:click="addEmp()" disabled v-show='isLoading'>
+                        <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>
+                        Loading...
+                      </button>
+                    <b-button variant="danger" type='reset' value='Reset'>Cancel</b-button>
+            </div>
+        </form>
       </div>
-      <b-form-group label='Age'>
-        <b-input type='number' 
-        v-model='age' 
-       v-validate='{ required: true }'
-       min='18'
-       max='120'
-        name='age'
-        />
-        <p v-if='errors.has("age")'>{{ errors.first('age') }}</p>
-      </b-form-group>
-
-       <b-form-group  label='Comment'>
-                  <b-form-textarea id="textarea1"
-                        v-model='comment'
-                        placeholder="Enter something"
-                        :rows="3"
-                        :max-rows="6"
-                        v-validate='"required"' name='comment'>
-        </b-form-textarea>
-        <p v-if='errors.has("comment")'>{{ errors.first("comment") }}</p>
-      </b-form-group >
-    
-      	<div class="justify-content-center">
-						<div class="col mt-2">
-							 <b-button type='submit' :disabled='errors.any()' v-show='!isLoading'>Submit</b-button>
-                  <button class='btn btn-primary' type='button' v-on:click="addEmp()" disabled v-show='isLoading'>
-                    <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>
-                    Loading...
-                  </button>
-							  <b-button variant="danger" type='reset' value='Reset'>Cancel</b-button>
-						</div>
-				</div>
-    </form>
   </div>
 </template>
 
@@ -72,9 +74,11 @@ const namespace: string = 'personForm';
   components: { ValidationObserver },
 })
 export default class FormComponent extends Vue {
-  public foods = ['apple', 'orange'];
+
   public saveStatue: boolean | null = null;
   public saveMessage: string = '';
+  public show = true;
+
   @State((state) => state.personForm.isProcessing) public isLoading?: boolean;
 
   public age: number | null = null;
@@ -107,5 +111,15 @@ export default class FormComponent extends Vue {
       }
     });
   }
-}
+  public onReset (evt :any) {
+      evt.preventDefault();
+      /* Reset our form values */
+      this.name = '';
+      this.age = 18;
+      this.comment = '';
+      /* Trick to reset/clear native browser form validation state */
+       //this.show = false;
+      this.$nextTick(() => { this.show = true });
+    }
+  }
 </script>

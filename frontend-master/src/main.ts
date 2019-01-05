@@ -12,7 +12,6 @@ import {ApiService} from './services/ApiService';
 Vue.use(VeeValidate, {
   fieldsBagName: 'vvFields',
 });
-
 Vue.use(VeeValidate);
 Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
