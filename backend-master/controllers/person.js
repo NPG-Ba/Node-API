@@ -9,21 +9,16 @@ module.exports = {
   // get all person
   getAllPerson: async (req, res) => {
     let limit = AppConf.page.default
-
     // number of records per page
     let offset = 0
-
     // call service get all emp
     const data = await PersonService.getCountPerson()
     let pageCurrent = data.count
     // Total records
-    let page = req.params.page // page number current
-    // check page
-    page = page === undefined ? (page = 1) : (page)
+    let page = 1 // page number current
     const pages = Math.ceil(parseInt(pageCurrent) / parseInt(limit))
     // Total page
     offset = limit * (page - 1)
-
     try {
       // Gọi service
       const emp = await PersonService.getAllPerson(limit, offset)
@@ -46,40 +41,39 @@ module.exports = {
       })
     }
   },
-  // getAllPersonByWhere: async (req, res, next) => {
-
-  //     //if (req.params.id === '0') next('route')
-  //     let limit = AppConf.page.default;
-
-  //     // number of records per page
-  //     let offset = 0;
-
-  //  // page number current
-  //     let id = req.params.person;
-
-  // let pages = 4;
-
-  //     try {
-  //         // Gọi service
-  //         const emp = await PersonService.getAllPersonWhereById(limit,offset,8);
-  //         // trả về res
-  //         if (emp.length > 0) {
-  //             res.status(CodeAPI[200]).send({
-  //                 data: emp,
-  //                 length: emp.length,
-  //                 pages: pages
-  //             });
-  //         } else {
-  //             res.status(CodeAPI[204]).send({
-  //                 message: 'No data'
-  //             });
-  //         }
-  //     } catch (error) {
-  //         res.status(CodeAPI[500]).send({
-  //             message: error.message
-  //         });
-  //     }
-  // },
+  getAllPersonByIdOrPage: async (req, res, next) => {
+    let limit = AppConf.page.default
+    // number of records per page
+    let offset = 0
+    // page number current
+    let id = req.params.id
+    let page = req.params.page
+    try {
+      var emp
+      // Gọi service
+      if (id === 0 | page === 0) {
+        emp = await PersonService.getAllPerson(limit, offset)
+      } else {
+        emp = await PersonService.getAllPersonWhereById(limit, offset, id)
+      }
+      // trả về res
+      if (emp.length > 0) {
+        res.status(CodeAPI[200]).send({
+          data: emp,
+          length: emp.length,
+          pages: page
+        })
+      } else {
+        res.status(CodeAPI[204]).send({
+          message: 'No data'
+        })
+      }
+    } catch (error) {
+      res.status(CodeAPI[500]).send({
+        message: error.message
+      })
+    }
+  },
   getByIdPerson: async (req, res) => {
     // get emp với id
     let emp = await PersonService.getPersonById(parseInt(req.params.id))

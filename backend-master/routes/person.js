@@ -6,13 +6,13 @@ const router = Express.Router()
 router.get('/', PersonController.getAllPerson)
 
 /* GET all person in DB */
-router.get('/:page(\\d+)', PersonController.getAllPerson)
+// router.get('/:page(\\d+)', PersonController.getAllPerson)
 
-/* Get person where id in DB */
-// router.get('/:person(\\d+)', PersonController.getAllPersonByWhere);
+/* Get person where id = min and page = pageCurrent + 1  in DB */
+router.get('/:page(\\d+)/:id(\\d+)', PersonController.getAllPersonByIdOrPage)
 
 /* GET id. */
-router.get('/personid/:id(\\d+)', PersonController.getByIdPerson)
+router.get('/id/:id(\\d+)', PersonController.getByIdPerson)
 
 /* Create  a emp */
 router.post('/', PersonController.addNewPerson)

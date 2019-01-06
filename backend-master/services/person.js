@@ -1,7 +1,7 @@
 import db from '../db/models'
 
-// const Sequelize = require('sequelize')
-// const Op = Sequelize.Op
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 
 export function getCountPerson () {
   const data = db.Person.findAndCountAll()
@@ -10,13 +10,16 @@ export function getCountPerson () {
 export function getAllPerson (limit, offset) {
   return db.Person.findAll({ offset: offset, limit: limit, order: [['id', 'DESC']] })
 }
-// export function getAllPersonWhereById(limit, offset,id) {
-//     return db.Person.findAll({where: {
-//         id: {
-//           [Op.lt]: id
-//         }
-//       }, offset: offset, limit: limit,order: [['id', 'DESC']] });
-// }
+export function getAllPersonWhereById (limit, offset, id) {
+  return db.Person.findAll({ where: {
+    id: {
+      [Op.lt]: id
+    }
+  },
+  offset: offset,
+  limit: limit,
+  order: [['id', 'DESC']] })
+}
 export function getPersonById (id) {
   return db.Person.findAll({ where: { id: id } })
 }
