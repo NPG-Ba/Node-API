@@ -5,12 +5,10 @@ import axios from 'axios';
 
 export class ApiService {
     public static init(baseURL: string) {
-        console.log(baseURL);
         axios.defaults.baseURL = baseURL;
     }
 
     public static get(url: string, params: any) {
-        console.log(url);
         return axios.get(url, params);
     }
 

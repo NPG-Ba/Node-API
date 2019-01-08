@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-md-center">
-    <div class="col-8">
+    <div class="col-12 col-sm-6 col-md-8">
       <h1 style="text-align: center;">Person From </h1>
         <p class='alert'
               v-bind:class='{ "alert-success": saveStatue, "alert-warning": !saveStatue }'
@@ -17,14 +17,16 @@
                 <div class="col-6">
                 <b-form-group label='Name'>
                   <b-input type='text'
+                                name ='name'
                                 v-model='name'
-                                v-validate='{ required: true, max: 10 }'
+                                v-validate="{required: true,  regex:/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/i }"
                                 autocomplete='false'
                     />
                   <p v-if='errors.has("name")'>{{ errors.first("name") }}</p>
                 </b-form-group>
                 <b-form-group label='Age'>
                   <b-input type='number' 
+                                data-vv-name="age"
                                 v-model='age' 
                                 v-validate='{ required: true }'
                                 min='18'
@@ -38,20 +40,25 @@
           <b-form-group  label='Comment'>
             <b-form-textarea id="textarea1"
                               v-model='comment'
+                              name='comment'
                               placeholder="Enter something"
                               :rows="3"
                               :max-rows="6"
-                              v-validate='"required"' name='comment'>
+                              v-validate="{ required: true,regex:/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/i }"
+                              >
+                             
               </b-form-textarea>
               <p v-if='errors.has("comment")'>{{ errors.first("comment") }}</p>
           </b-form-group >
-            <div class="justify-content-center">
+          <div class="row justify-content-md-left">
+                <div class="col-6 col-sm-12 col-md-6 col-xs-12" style="text-align: right;">
                   <b-button type='submit' :disabled='errors.any()' v-show='!isLoading'>Submit</b-button>
-                      <button class='btn btn-primary' type='button' v-on:click="addEmp()" disabled v-show='isLoading'>
+                      <button class="btn btn-warning" type='button' v-on:click="addEmp()" disabled v-show='isLoading'>
                         <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>
                         Loading...
                       </button>
-                    <b-button variant="danger" type='reset' value='Reset'>Cancel</b-button>
+                    <b-button class="btn btn-danger" type='reset' value='Reset'>Cancel</b-button>
+                </div>
             </div>
         </form>
       </div>
@@ -100,12 +107,17 @@ export default class FormComponent extends Vue {
           .dispatch('save', new Person(this.name, this.age || 0, this.comment))
           .then(
             (success: FormResponse) => {
+              // reset lại id min
               this.saveStatue = true;
-              this.saveMessage = 'Save success ' + success.id;
+              this.saveMessage = 'Save success ';
+              this.$store.state.listTable.idMin = this.$store.state.listTable.idMin + 1;
+              this.name = '';
+              this.age = 0;
+              this.comment = '';
             },
             (error: MyHttpResponse) => {
               this.saveStatue = true;
-              this.saveMessage = 'Save fail ' + error.error.code;
+              this.saveMessage = 'Save fail ';
             },
           );
       }
@@ -115,7 +127,7 @@ export default class FormComponent extends Vue {
       evt.preventDefault();
       /* Reset our form values */
       this.name = '';
-      this.age = 18;
+      this.age = 0;
       this.comment = '';
       /* Trick to reset/clear native browser form validation state */
        //this.show = false;

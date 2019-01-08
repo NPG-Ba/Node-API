@@ -24,8 +24,7 @@ export function getPersonById (id) {
   return db.Person.findAll({ where: { id: id } })
 }
 export function addNewPerson (data) {
-  if (db.Person.create(data)) { return true }
-  return false
+  return db.Person.create(data)
 }
 export function deletePersonById (id) {
   if (db.Person.destroy({ where: { id: id } })) return true

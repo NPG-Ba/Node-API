@@ -5,9 +5,6 @@ const router = Express.Router()
 /* GET all person in DB */
 router.get('/', PersonController.getAllPerson)
 
-/* GET all person in DB */
-// router.get('/:page(\\d+)', PersonController.getAllPerson)
-
 /* Get person where id = min and page = pageCurrent + 1  in DB */
 router.get('/:page(\\d+)/:id(\\d+)', PersonController.getAllPersonByIdOrPage)
 

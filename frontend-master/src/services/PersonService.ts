@@ -8,13 +8,23 @@ export class PersonService {
     public save(personForm: Person): Promise<any> {
         return ApiService.post(`/person`, personForm);
     }
-    public search(params: any): Promise<any> {
+    public init(params: any): Promise<any> {
         return ApiService.get(`/person/`, {
             params,
         });
     }
+    public more(params: any): Promise<any> {
+        return ApiService.get(`/person/`+ params[0] + '/'+ params[1],{
+            params
+        });
+    }
     public delete(params: any): Promise<any> {
-        return ApiService.delete('/person/', {
+        return ApiService.delete('/person/' + params[0], {
+            params
+        });
+    }
+    public up(params: any): Promise<any> {
+        return ApiService.put('/person/age/' + parseInt(params[0]), {
             params
         });
     }

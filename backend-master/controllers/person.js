@@ -102,9 +102,9 @@ module.exports = {
       try {
         data.comment = '<p>' + data.comment.split('\n').join('</p><p>') + '</p>'
         let isNewRecord = await PersonService.addNewPerson(data)
-        if (isNewRecord) {
+        if (isNewRecord.dataValues.id > 0) {
           res.status(CodeAPI[200]).send({
-            data: data
+            data: isNewRecord.dataValues
           })
         } else {
           return res.status(CodeAPI[404]).send({
@@ -169,7 +169,7 @@ module.exports = {
         let isDelete = await PersonService.deletePersonById(id)
         if (isDelete) {
           res.status(CodeAPI[200]).send({
-            message: isDelete
+            data: id
           })
         } else {
           res.status(CodeAPI[404]).send({

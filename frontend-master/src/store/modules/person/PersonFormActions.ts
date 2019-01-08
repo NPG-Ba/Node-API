@@ -9,21 +9,29 @@ export function save(store: ActionContext<PersonFormState, any>,
     store.commit('setProcessing', true);
     return new PersonService().save(formData)
     .then((resp) => {
-        store.dispatch('search');
+        // Thêm mới thành công thì sẽ làm TODO
+        store.commit('add', resp.data.data);
     })
     .finally(() => {
         store.commit('setProcessing', false);
     });
 }
-export function updateAge(store: ActionContext<PersonFormState, any>, age: number) {
-    // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
+export function updateAge(store: ActionContext<PersonFormState, any>, params?: any) {
+        // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
+        return new PersonService().up(params).then((resp)=>{
+            // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
+            store.commit('agePerson', params[1]);
+        }).finally(()=>{
+            console.log('Delete susccess !');
+        })
 }
-export function deletePerson(store: ActionContext<PersonFormState, any>, id: number) {
+export function deletePerson(store: ActionContext<PersonFormState, any>, params?: any) {
     // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
-    return new PersonService().delete(id).then((resp)=>{
-        console.log('oke service');
+    return new PersonService().delete(params).then((resp)=>{
+        // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
+        store.commit('deletePerson', params[1]);
     }).finally(()=>{
-        console.log('not work service');
+        console.log('Delete susccess !');
     })
 }
 export default {
