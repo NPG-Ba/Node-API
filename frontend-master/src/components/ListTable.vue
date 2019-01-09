@@ -8,7 +8,7 @@
                   @row-hovered="myRowClickHandler"
                   >
             <template slot="nameage" slot-scope="data">
-              {{data.item.name}} ({{data.item.age}})
+              {{data.item.name}} ( {{data.item.age}} )
             </template>
             <span slot="comment" slot-scope="data" v-html="data.value">     
             </span>
@@ -38,41 +38,9 @@ import index from '@/store';
 
 @Component
 export default class ListTableComponent extends Vue {
-  // get item cho table
-  get items() {
-
-    // Lấy page hiện tai
-    this.currentPage = this.$store.state.listTable.currentPage;
-
-    // Lấy id nhỏ nhất trong table
-    this.idMin = this.$store.state.listTable.idMin;
-
-     // Lấy max page
-    this.maxPage = this.$store.state.listTable.totalPage;
-
-    // Lấy data cho table
-    return this.$store.state.listTable.items;
-  }
-  // setting trạng thái cho state
-  get isProcessing() {
-    return this.$store.state.listTable.isProcessing;
-  }
 
   // Init đối tượng service
   public personService = new PersonService();
-
-  // Trạng thái state
-  public saveStatue: boolean | null = null;
-
-  public saveMessage: string = '';
-
-  // Setting header table
-  public fields1 = [
-                    { key: 'nameage', label: 'First name and age' },
-                    { key: 'comment', label: 'Comment'},
-                    { key: 'age', label: 'Tuổi'},
-                    { key: 'action', label: 'Hành động'},
-                    ];
 
   // Setting table lúc hover vào rows
   private hover = true;
@@ -89,14 +57,46 @@ export default class ListTableComponent extends Vue {
   // số lượng page tối đa
   private maxPage = 0;
 
+  // Trạng thái state 
+  public saveStatue: boolean | null = null;
+
   // Chỉ số của row chọn
   private index = 0;
 
   // Trạng thái của button
   private isDisabled = false;
+  
+  public saveMessage: string = '';
 
-  public myRowClickHandler(record: any, index: any) {
-    this.index = index; // This will be the item data for the row
+  // Setting header table
+  public fields1 = [{ key: 'id',label: '#'},
+                    { key: 'nameage', label: 'First name and age' },
+                    { key: 'comment',label: 'Comment'},
+                    { key: 'age',label: 'Tuổi'},
+                    { key: 'action',label: 'Hành động'}
+                    ];
+  // get item cho table
+  get items() {
+
+    // Lấy page hiện tai
+    this.currentPage = this.$store.state.listTable.currentPage;
+
+    // Lấy id nhỏ nhất trong table
+    this.idMin = this.$store.state.listTable.idMin;
+
+     // Lấy max page
+    this.maxPage = this.$store.state.listTable.totalPage;
+
+    // Lấy data cho table
+    return this.$store.state.listTable.items;
+  }
+
+  public myRowClickHandler(record :any, index:any) {
+    this.index=index; // This will be the item data for the row
+  }
+  // setting trạng thái cho state
+  get isProcessing() {
+    return this.$store.state.listTable.isProcessing;
   }
 
   // Init table => dổ dữ liệu vào table
@@ -105,22 +105,23 @@ export default class ListTableComponent extends Vue {
   }
 
   // Method update age with id
-  public updateAgePerson(data: any) {
-    this.$store.dispatch('updateAge', [data.item.id, data.index]);
+  public updateAgePerson(data:any){
+    this.$store.dispatch('updateAge',[data.item.id,data.index]);
   }
 
   // Method delete person with id
-  public deletePerson(data: any) {
-    this.$store.dispatch('deletePerson', [data.item.id, data.index]);
+  public deletePerson(data:any){
+    this.$store.dispatch('deletePerson',[data.item.id,data.index]);
   }
 
   // get more data with id ang page
-  public morePerson(event: any) {
-    event.preventDefault();
-    if ((this.currentPage + 1) <= this.maxPage) {
+  public morePerson(event : any){
+    event.preventDefault()
+    if((this.currentPage +1) <= this.maxPage)
+    {
        this.isDisabled = false;
-       this.$store.dispatch('morePerson', [this.currentPage + 1, this.idMin]);
-    } else {
+       this.$store.dispatch('morePerson',[this.currentPage + 1,this.idMin]);
+    }else{
        this.isDisabled = true;
     }
   }

@@ -1,0 +1,9 @@
+{
+    "components": {
+        "home": {
+            "placeholder": {
+                "welcome": "Welcome"
+            }
+        }
+    }
+}

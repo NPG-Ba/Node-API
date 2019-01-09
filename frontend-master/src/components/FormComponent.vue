@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1 class="text-center">Person Form</h1>
+ {{ $t('lang.components.home.placeholder.welcome') }}
     <div
       class='alert mt-3'
       v-bind:class='{ "alert-success": saveStatue, "alert-warning": !saveStatue }'
@@ -85,7 +86,6 @@ export default class FormComponent extends Vue {
   public saveStatue: boolean | null = null;
   public saveMessage: string = '';
   public show = true;
-
   @State((state) => state.personForm.isProcessing) public isLoading?: boolean;
 
   public age: number | null = null;
