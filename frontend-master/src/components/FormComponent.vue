@@ -1,67 +1,67 @@
 <template>
-  <div class="row justify-content-md-center">
-    <div class="col-12 col-sm-6 col-md-8">
-      <h1 style="text-align: center;">Person From </h1>
-        <p class='alert'
-              v-bind:class='{ "alert-success": saveStatue, "alert-warning": !saveStatue }'
-              role='alert'
-              v-show='saveStatue !== null'>
-              {{saveMessage}}
-        </p>
-        <form @submit.prevent='onSubmit' 
-                autocomplete='false' 
-                name="form"
-                @reset="onReset"
-                v-if="show">
-              <div class="row justify-content-md-left">
-                <div class="col-6">
-                <b-form-group label='Name'>
-                  <b-input type='text'
-                                name ='name'
+  <div>
+    <h1 class="text-center">Person Form</h1>
+    <div
+      class='alert mt-3'
+      v-bind:class='{ "alert-success": saveStatue, "alert-warning": !saveStatue }'
+      role='alert'
+      v-show='saveStatue !== null'
+    >{{saveMessage}}</div>
+    <form @submit.prevent='onSubmit' v-if="show" autocomplete='false' name="form" @reset="onReset">
+    <div class="form-group mt-3">
+         <b-form-group horizontal :label-cols="2" label="Name" label-for="input_default">
+		    <b-form-input 
+        class='form-control input-small'
+        name ='name'
                                 v-model='name'
                                 v-validate="{required: true,  regex:/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/i }"
                                 autocomplete='false'
-                    />
-                  <p v-if='errors.has("name")'>{{ errors.first("name") }}</p>
-                </b-form-group>
-                <b-form-group label='Age'>
-                  <b-input type='number' 
-                                data-vv-name="age"
+        ></b-form-input>
+        <p v-if='errors.has("name")'>{{ errors.first("name") }}</p>
+	    </b-form-group>
+    </div>
+      <div class="form-group">
+         <b-form-group horizontal :label-cols="2" label="Age" label-for="input_default">
+            <b-form-input 
+            class='form-control input-small'
+              data-vv-name="age"
                                 v-model='age' 
                                 v-validate='{ required: true }'
-                                min='18'
-                                max='120'
+                                min='15'
+                                max='150'
                                 name='age'
-                    />
-                  <p v-if='errors.has("age")'>{{ errors.first('age') }}</p>
-                </b-form-group>
-                </div>
-              </div>
-          <b-form-group  label='Comment'>
+            >
+            </b-form-input>
+        <p v-if='errors.has("age")'>{{ errors.first('age') }}</p>
+	    </b-form-group>
+    </div>
+<div class="form-group">
+         <b-form-group horizontal :label-cols="2" label="Comment" label-for="input_default">
             <b-form-textarea id="textarea1"
-                              v-model='comment'
+                         v-model='comment'
                               name='comment'
                               placeholder="Enter something"
                               :rows="3"
                               :max-rows="6"
                               v-validate="{ required: true,regex:/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]+$/i }"
-                              >
-                             
-              </b-form-textarea>
-              <p v-if='errors.has("comment")'>{{ errors.first("comment") }}</p>
-          </b-form-group >
-          <div class="row justify-content-md-left">
-                <div class="col-6 col-sm-12 col-md-6 col-xs-12" style="text-align: right;">
-                  <b-button type='submit' :disabled='errors.any()' v-show='!isLoading'>Submit</b-button>
-                      <button class="btn btn-warning" type='button' v-on:click="addEmp()" disabled v-show='isLoading'>
+                        >
+        </b-form-textarea>
+        <p v-if='errors.has("comment")'>{{ errors.first("comment") }}</p>
+	    </b-form-group>
+    </div>
+
+      	<div class="justify-content-center">
+						<div class="col mt-2 text-center">
+							 <b-button class="btn btn-primary" type='submit' :disabled='errors.any()' v-show='!isLoading'>Ok</b-button>
+                 <button class="btn btn-warning" type='button' v-on:click="addEmp()" disabled v-show='isLoading'>
                         <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>
                         Loading...
                       </button>
-                    <b-button class="btn btn-danger" type='reset' value='Reset'>Cancel</b-button>
-                </div>
-            </div>
-        </form>
-      </div>
+							   <b-button class="btn btn-danger" type='reset' value='Reset'>Cancel</b-button>
+						</div>
+				</div>
+        
+    </form>
   </div>
 </template>
 
@@ -123,15 +123,28 @@ export default class FormComponent extends Vue {
       }
     });
   }
-  public onReset (evt :any) {
+  public onReset(evt: any) {
       evt.preventDefault();
       /* Reset our form values */
       this.name = '';
       this.age = 0;
       this.comment = '';
       /* Trick to reset/clear native browser form validation state */
-       //this.show = false;
-      this.$nextTick(() => { this.show = true });
+       // this.show = false;
+      this.$nextTick(() => { this.show = true; });
     }
   }
 </script>
+<style lang="scss">
+.pre{
+  font-size: 1rem!important;
+}
+.btn-primary{
+  background-color: #007bff!important;
+}
+@media (min-width: 768px){
+  .input-small{
+    width: 60%!important;
+  }
+}
+</style>

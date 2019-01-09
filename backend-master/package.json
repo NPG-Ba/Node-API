@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www --exec babel-node"
+    "start": "nodemon ./bin/www --exec babel-node",
+    "test": "standard && SET \"NODE_ENV=test\" && mocha test"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -27,7 +28,15 @@
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
+    "@babel/register": "^7.0.0",
+    "babel-polyfill": "^6.26.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "mochawesome": "^3.1.1",
     "nodemon": "^1.18.9",
-    "standard": "^12.0.1"
+    "sequelize-fixtures": "^0.7.0",
+    "sqlite3": "^4.0.4",
+    "standard": "^12.0.1",
+    "supertest": "^3.3.0"
   }
 }

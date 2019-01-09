@@ -13,7 +13,7 @@ export class ApiService {
     }
 
     public static post(resource: any, data: any) {
-        
+
         return axios.post(resource, data);
     }
 
@@ -22,6 +22,6 @@ export class ApiService {
     }
 
     public static delete(url: string, params: any) {
-        return axios.delete(url,params);
+        return axios.delete(url, params);
     }
 }

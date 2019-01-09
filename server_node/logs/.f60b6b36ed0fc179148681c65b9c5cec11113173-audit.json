@@ -39,6 +39,21 @@
             "date": 1546448515572,
             "name": "logs\\report-2019-01-03-00.log",
             "hash": "46c4868be7c0d94e8f28fc2bf724f09c"
+        },
+        {
+            "date": 1546485582066,
+            "name": "logs\\report-2019-01-03-10.log",
+            "hash": "0c3dd0b5a6ce4fc7c43cd85fb4f68297"
+        },
+        {
+            "date": 1546490080805,
+            "name": "logs\\report-2019-01-03-11.log",
+            "hash": "52a113e43d069c78ce1c8b2ddfeb2b86"
+        },
+        {
+            "date": 1546493681727,
+            "name": "logs\\report-2019-01-03-12.log",
+            "hash": "acb10c7f1be92c3b6c3af6bf1cf04c75"
         }
     ]
 }

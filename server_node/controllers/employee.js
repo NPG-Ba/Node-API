@@ -56,17 +56,21 @@ module.exports = {
     },
     get_id: async (req, res) => {
         //get emp với id
-                let emp = await EmployeeService.get_id(parseInt(req.params.id));
-                if (emp.length > 0) {
-                    res.json({
-                        data: emp,
-                        length: emp.length
-                    });
-                } else {
-                    return res.status(404).send({
-                        message: "Emp not found with id " + req.params.id
-                    });
-                }
+        try {
+            let emp = await EmployeeService.get_id(parseInt(req.params.id));
+            if (emp.length > 0) {
+                res.status(200).send(emp);
+            } else {
+                return res.status(404).send({
+                    message: "Emp not found with id " + req.params.id
+                });
+            }
+            
+        } catch (error) {
+            res.status(500).send("There was a problem finding the emp." + 'Message : ' + error);
+            
+        }
+
     },
     // add a new employeee
 
@@ -92,9 +96,7 @@ module.exports = {
                 }
 
             } catch (err) {
-                return res.status(500).send({
-                    message: "Error retrieving Emp with id " + rep.body.id + err
-                });
+                res.status(500).send("There was a problem add new the emp.");
             }
         } else {
             return res.status(400).send({
@@ -107,7 +109,6 @@ module.exports = {
 
     update_emp: async (rep, res) => {
         const data = rep.body;
-
         const id = rep.params.id;
         let result = Joi.validate(data, validate.schema, (err, value) => {
             if (err) return false;
@@ -160,9 +161,7 @@ module.exports = {
                     let isDelete = await EmployeeService.delete_id(id);
 
                     if (isDelete) {
-                        res.status(200).send({
-                            message: 'oke'
-                        });
+                        res.status(200).send("Emp: "+ id +" was deleted.");
                     } else {
                         res.status(404).send({
                             message: "Emp not found with id " + req.params.id
@@ -174,37 +173,37 @@ module.exports = {
                     });
                 }
             } catch (err) {
-                return res.status(500).send({
-                    message: " Server err : " + err
-                });
+                res.status(500).send("There was a problem deleting the emp.");
             }
     },
     update_age : async (rep,res) =>{
-        const id = rep.params.id;
-        let emp = await employee.findAll({
-            where: {
-                id
-            }
-        });
-        let age = emp[0].age + 1;
-        console.log(age <= 120)
-        if(age <= 120){
-            try {
-                await EmployeeService.update_age_id(emp,age);
-                    res.json({
-                        result: 'oke'
-                    });
-            } catch (error) {
-                return res.status(500).send({
-                    message: " Server err : " + err
+        try {
+            const id = rep.params.id;
+            let emp = await employee.findAll({
+                where: {
+                    id
+                }
+            });
+            let age = emp[0].age + 1;
+            console.log(age <= 120)
+            if(age <= 120){
+                try {
+                    await EmployeeService.update_age_id(emp,age);
+                    res.status(200).send("Emp: "+ id +" was update.");
+                } catch (error) {
+                    res.status(500).send("There was a problem update the emp.");
+                }
+            }else
+            {
+                return res.status(400).send({
+                    message: "Emp age <=120 "
                 });
             }
-        }else
-        {
-            return res.status(404).send({
-                message: "Emp age <=120 " + age
-            });
+        } catch (error) {
+
+            res.status(500).send("There was a problem update the emp.");
         }
+        
             
     }
 

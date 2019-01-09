@@ -38,59 +38,64 @@ module.exports = {
       })
     })
   },
-  getAllPersonByIdOrPage: async (req, res, next) => {
+
+  // get more person id
+  getAllPersonByIdOrPage: (req, res, next) => {
     let limit = AppConf.page.default
     // number of records per page
     let offset = 0
     // page number current
-    let id = req.params.id
-    let page = req.params.page
-    try {
-      var emp
+    let id = parseInt(req.params.id)
+    let page = parseInt(req.params.page)
       // Gọi service
-      if (id === 0 || page === 0) {
-        console.log(id, page)
-        emp = await PersonService.getAllPerson(limit, offset)
-      } else {
-        emp = await PersonService.getAllPersonWhereById(limit, offset, id)
-      }
-      // trả về res
-      if (emp.length > 0) {
-        res.status(CodeAPI[200]).send({
-          data: emp,
-          length: emp.length,
-          pages: page
+      if ( (id === 0) || (page === 0) ){
+        PersonService.getAllPerson(limit, offset).then((dataPerson) => {
+          res.status(CodeAPI[200]).send({
+            data: dataPerson,
+            length: dataPerson.length,
+            pages: page
+          })
+        }, () => {
+          res.status(CodeAPI[204]).send({
+            message: 'No data',
+            data: {}
+          })
         })
       } else {
-        res.status(CodeAPI[204]).send({
-          message: 'No data'
+        PersonService.getAllPersonWhereById(limit, offset, id).then((dataPerson) => {
+          res.status(CodeAPI[200]).send({
+            data: dataPerson,
+            length: dataPerson.length,
+            pages: page
+          })
+        }, () => {
+          res.status(CodeAPI[204]).send({
+            message: 'No data',
+            data: {}
+          })
         })
       }
-    } catch (error) {
-      res.status(CodeAPI[500]).send({
-        message: error.message
-      })
-    }
   },
-  getByIdPerson: (req, res) => {
-    // get emp với id
-    PersonService.getPersonById(parseInt(req.params.id)).then((data) => {
-      if (data.length > 0) {
-        res.status(CodeAPI[200]).send({
-          data: data[0],
-          length: data.length
-        })
-      } else {
-        return res.status(CodeAPI[404]).send({
-          message: 'Emp not found with id  ' + req.params.id
-        })
-      }
-    }, (error) => {
-      return res.status(CodeAPI[500]).send({
-        message: ' Server err : ' + error
-      })
-    })
-  },
+
+  // getByIdPerson: (req, res) => {
+  //   // get emp với id
+  //   PersonService.getPersonById(parseInt(req.params.id)).then((data) => {
+  //     if (data.length > 0) {
+  //       res.status(CodeAPI[200]).send({
+  //         data: data[0],
+  //         length: data.length
+  //       })
+  //     } else {
+  //       return res.status(CodeAPI[404]).send({
+  //         message: 'Emp not found with id  ' + req.params.id
+  //       })
+  //     }
+  //   }, (error) => {
+  //     return res.status(CodeAPI[500]).send({
+  //       message: ' Server err : ' + error
+  //     })
+  //   })
+  // },
   // add a new employeee
 
   addNewPerson: (rep, res) => {
@@ -120,41 +125,43 @@ module.exports = {
 
   // update employee
 
-  updatePerson: async (rep, res) => {
-    const data = rep.body
-    let result = Joi.validate(data, Validate.schema, (err, _value) => {
-      if (err) return false
-      return true
-    })
+  // updatePerson: async (rep, res) => {
+  //   const data = rep.body
+  //   let result = Joi.validate(data, Validate.schema, (err, _value) => {
+  //     if (err) return false
+  //     return true
+  //   })
 
-    if (result) {
-      try {
-        let emp = await PersonService.getPersonById(parseInt(rep.params.id))
-        if (emp.length > 0) {
-          await PersonService.updatePersonById(emp, data)
-          res.status(CodeAPI[200]).send({
-            data: emp
-          })
-        }
-      } catch (error) {
-        res.status(CodeAPI[400])({
-          data: {},
-          message: `Cannot update a new emp failed: ${error}`
-        })
-      }
-    } else {
-      return res.status(CodeAPI[400]).send({
-        message: 'Input is invalid, please check input : '
-      })
-    }
-  },
+  //   if (result) {
+  //     try {
+  //       let emp = await PersonService.getPersonById(parseInt(rep.params.id))
+  //       if (emp.length > 0) {
+  //         await PersonService.updatePersonById(emp, data)
+  //         res.status(CodeAPI[200]).send({
+  //           data: emp
+  //         })
+  //       }
+  //     } catch (error) {
+  //       res.status(CodeAPI[400])({
+  //         data: {},
+  //         message: `Cannot update a new emp failed: ${error}`
+  //       })
+  //     }
+  //   } else {
+  //     return res.status(CodeAPI[400]).send({
+  //       message: 'Input is invalid, please check input : '
+  //     })
+  //   }
+  // },
 
   // delete employee
 
   deletePerson: (rep, res) => {
-    PersonService.getPersonById(rep.params.id).then((data) => {
+    // get id
+    let id  = parseInt(rep.params.id)
+    PersonService.getPersonById(id).then((data) => {
       if (data.length > 0) {
-        PersonService.deletePersonById(rep.params.id).then(() => {
+        PersonService.deletePersonById(id).then(() => {
           res.status(CodeAPI[200]).send({
             result: true
           })
@@ -165,7 +172,7 @@ module.exports = {
         })
       } else {
         res.status(CodeAPI[404]).send({
-          message: 'Emp not found with id ' + rep.params.id
+          message: 'Emp not found with id ' + id
         })
       }
     }, (error) => {
@@ -174,25 +181,40 @@ module.exports = {
       })
     })
   },
+
+  // update age person id
+
   updateAgePerson: (rep, res) => {
-    PersonService.getPersonById(parseInt(rep.params.id)).then((data) => {
-      console.log(data[0].dataValues.age + 1)
-      // if (data[0].dataValues.age <= 120) {
-      //   data[0].dataValues.age = parseInt(data[0].dataValues.age) + 1
-      //   PersonService.updateAgePersonById(data[0]).then(() => {
-      //     res.status(CodeAPI[200]).send({
-      //       result: true
-      //     })
-      //   }, () => {
-      //     return res.status(CodeAPI[400]).send({
-      //       result: false
-      //     })
-      //   })
-      // } else {
-      //   return res.status(CodeAPI[404]).send({
-      //     message: false
-      //   })
-      // }
+    let id = parseInt(rep.params.id)
+    PersonService.getPersonById(id).then((data) => {
+      // No data
+      if(data.length === 0)
+      {
+        res.status(CodeAPI[500]).send({
+          message: 'Not update'
+        })
+      }
+      else{
+        let age = parseInt(data[0].dataValues.age + 1);
+        if (age <= 150) {
+         var isResult =  PersonService.updateAgePersonById(id,age)
+          if(isResult===1){
+            res.status(CodeAPI[200]).send({
+              result: true
+            })
+          } else 
+          {
+            res.status(CodeAPI[204]).send({
+              result: false
+            })
+          }
+        } else {
+          return res.status(CodeAPI[404]).send({
+            message: 'Check input age'
+          })
+        }
+      }
+      
     }, (error) => {
       res.status(CodeAPI[500]).send({
         message: error.message

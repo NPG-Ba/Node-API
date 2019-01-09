@@ -12,13 +12,13 @@ router.get('/', PersonController.getAllPerson)
 router.get('/:page(\\d+)/:id(\\d+)', PersonController.getAllPersonByIdOrPage)
 
 /* GET id. */
-router.get('/id/:id(\\d+)', PersonController.getByIdPerson)
+// router.get('/id/:id(\\d+)', PersonController.getByIdPerson)
 
 /* Create  a emp */
 router.post('/', PersonController.addNewPerson)
 
 /* Update data in DB */
-router.put('/:id(\\d+)', PersonController.updatePerson)
+// router.put('/:id(\\d+)', PersonController.updatePerson)
 
 /* Delete data in DB */
 router.delete('/:id(\\d+)', PersonController.deletePerson)

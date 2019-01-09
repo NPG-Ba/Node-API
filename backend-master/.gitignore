@@ -1,6 +1,7 @@
 #Visual Code
 .vs/
-
+.vscode/
+mochawesome-report/
 # Logs
 logs
 *.log

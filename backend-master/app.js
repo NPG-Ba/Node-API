@@ -1,4 +1,6 @@
 import AppConf from './config/application'
+
+// setting router
 import indexRouter from './routes/index'
 import personRouter from './routes/person'
 const createError = require('http-errors')

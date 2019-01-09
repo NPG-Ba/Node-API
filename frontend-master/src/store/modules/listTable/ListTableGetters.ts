@@ -24,5 +24,5 @@ export default {
     isTableProcessing,
     getTotalPage,
     getCurrentPage,
-    getIdMin
+    getIdMin,
 } as GetterTree<ListTableState, any>;

@@ -14,18 +14,18 @@ export class PersonService {
         });
     }
     public more(params: any): Promise<any> {
-        return ApiService.get(`/person/`+ params[0] + '/'+ params[1],{
-            params
+        return ApiService.get(`/person/` + params[0] + '/' + params[1], {
+            params,
         });
     }
     public delete(params: any): Promise<any> {
         return ApiService.delete('/person/' + params[0], {
-            params
+            params,
         });
     }
     public up(params: any): Promise<any> {
         return ApiService.put('/person/age/' + parseInt(params[0]), {
-            params
+            params,
         });
     }
 }
