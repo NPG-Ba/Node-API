@@ -1,45 +1,42 @@
 import * as PersonService from '../services/person.js'
 import * as Joi from 'joi'
-import * as Validate from '../models/validate/empvalidate'
+import * as Validate from '../models/validate/personvalidate'
 import AppConf from '../config/application'
 import CodeAPI from '../models/response/codes'
 
 module.exports = {
 
   // get all person
-  getAllPerson: async (req, res) => {
+  getAllPerson: (req, res) => {
     let limit = AppConf.page.default
     // number of records per page
     let offset = 0
-    // call service get all emp
-    const data = await PersonService.getCountPerson()
-    let pageCurrent = data.count
-    // Total records
     let page = 1 // page number current
-    const pages = Math.ceil(parseInt(pageCurrent) / parseInt(limit))
-    // Total page
-    offset = limit * (page - 1)
-    try {
-      // Gọi service
-      const emp = await PersonService.getAllPerson(limit, offset)
-      // trả về res
-      if (emp.length > 0) {
+    // Total records
+    let totalRows = 0
+    // call service get all emp
+    PersonService.getCountPerson().then((data) => {
+      totalRows = data.count
+      const pages = Math.ceil(parseInt(totalRows) / parseInt(limit))
+      // Total page
+      offset = limit * (page - 1)
+      PersonService.getAllPerson(limit, offset).then((emp) => {
         res.status(CodeAPI[200]).send({
           data: emp,
           length: emp.length,
           pages: pages
         })
-      } else {
+      }, () => {
         res.status(CodeAPI[204]).send({
           message: 'No data',
           data: {}
         })
-      }
-    } catch (error) {
+      })
+    }, (error) => {
       res.status(CodeAPI[500]).send({
         message: error.message
       })
-    }
+    })
   },
   getAllPersonByIdOrPage: async (req, res, next) => {
     let limit = AppConf.page.default
@@ -51,7 +48,8 @@ module.exports = {
     try {
       var emp
       // Gọi service
-      if (id === 0 | page === 0) {
+      if (id === 0 || page === 0) {
+        console.log(id, page)
         emp = await PersonService.getAllPerson(limit, offset)
       } else {
         emp = await PersonService.getAllPersonWhereById(limit, offset, id)
@@ -74,48 +72,45 @@ module.exports = {
       })
     }
   },
-  getByIdPerson: async (req, res) => {
+  getByIdPerson: (req, res) => {
     // get emp với id
-    let emp = await PersonService.getPersonById(parseInt(req.params.id))
-    if (emp.length > 0) {
-      res.status(CodeAPI[200]).send({
-        data: emp,
-        length: emp.length
+    PersonService.getPersonById(parseInt(req.params.id)).then((data) => {
+      if (data.length > 0) {
+        res.status(CodeAPI[200]).send({
+          data: data[0],
+          length: data.length
+        })
+      } else {
+        return res.status(CodeAPI[404]).send({
+          message: 'Emp not found with id  ' + req.params.id
+        })
+      }
+    }, (error) => {
+      return res.status(CodeAPI[500]).send({
+        message: ' Server err : ' + error
       })
-    } else {
-      return res.status(CodeAPI[404]).send({
-        message: 'Emp not found with id  ' + req.params.id
-      })
-    }
+    })
   },
   // add a new employeee
 
-  addNewPerson: async (rep, res) => {
+  addNewPerson: (rep, res) => {
     let data = rep.body
-
     // validate input
     let result = Joi.validate(data, Validate.schema, (err, _value) => {
       if (err) return false
       return true
     })
     if (result) {
-      try {
-        data.comment = '<p>' + data.comment.split('\n').join('</p><p>') + '</p>'
-        let isNewRecord = await PersonService.addNewPerson(data)
-        if (isNewRecord.dataValues.id > 0) {
-          res.status(CodeAPI[200]).send({
-            data: isNewRecord.dataValues
-          })
-        } else {
-          return res.status(CodeAPI[404]).send({
-            message: 'The url in the request is invalid : ' + rep.params.id
-          })
-        }
-      } catch (err) {
-        return res.status(CodeAPI[500]).send({
-          message: 'Error retrieving Emp with id ' + rep.body.id + err
+      data.comment = '<p>' + data.comment.split('\n').join('</p><p>') + '</p>'
+      PersonService.addNewPerson(data).then((data) => {
+        res.status(CodeAPI[200]).send({
+          data: data.dataValues
         })
-      }
+      }, (error) => {
+        return res.status(CodeAPI[500]).send({
+          message: 'Error retrieving Person with id ' + error
+        })
+      })
     } else {
       return res.status(CodeAPI[400]).send({
         message: 'The url in the request is invalid : ' + rep.body.id
@@ -127,7 +122,6 @@ module.exports = {
 
   updatePerson: async (rep, res) => {
     const data = rep.body
-    const id = rep.params.id
     let result = Joi.validate(data, Validate.schema, (err, _value) => {
       if (err) return false
       return true
@@ -135,7 +129,7 @@ module.exports = {
 
     if (result) {
       try {
-        let emp = await PersonService.getPersonById(id)
+        let emp = await PersonService.getPersonById(parseInt(rep.params.id))
         if (emp.length > 0) {
           await PersonService.updatePersonById(emp, data)
           res.status(CodeAPI[200]).send({
@@ -157,55 +151,52 @@ module.exports = {
 
   // delete employee
 
-  deletePerson: async (rep, res) => {
-    const id = rep.params.id
-    try {
-      // Check emp with id  = ?
-      const emp = await PersonService.getPersonById(id)
-
-      if (emp.length > 0) {
-        console.log(emp)
-        // call function Delete emp
-        let isDelete = await PersonService.deletePersonById(id)
-        if (isDelete) {
+  deletePerson: (rep, res) => {
+    PersonService.getPersonById(rep.params.id).then((data) => {
+      if (data.length > 0) {
+        PersonService.deletePersonById(rep.params.id).then(() => {
           res.status(CodeAPI[200]).send({
-            data: id
+            result: true
           })
-        } else {
-          res.status(CodeAPI[404]).send({
-            message: 'Emp not found with id ' + rep.params.id
+        }, () => {
+          res.status(CodeAPI[200]).send({
+            result: false
           })
-        }
+        })
       } else {
-        return res.status(CodeAPI[204]).send({
+        res.status(CodeAPI[404]).send({
           message: 'Emp not found with id ' + rep.params.id
         })
       }
-    } catch (err) {
+    }, (error) => {
       return res.status(CodeAPI[500]).send({
-        message: ' Server err : ' + err
+        message: ' Server err : ' + error
       })
-    }
+    })
   },
-  updateAgePerson: async (rep, res) => {
-    const id = rep.params.id
-    let emp = PersonService.getPersonById(id)
-    let age = emp[0].age + 1
-    if (age <= 120) {
-      try {
-        await PersonService.updateAgePersonById(emp, age)
-        res.status(CodeAPI[200]).send({
-          result: true
-        })
-      } catch (error) {
-        return res.status(CodeAPI[500]).send({
-          message: ' Server err : ' + error
-        })
-      }
-    } else {
-      return res.status(CodeAPI[404]).send({
-        message: 'Emp age <=120 ' + age
+  updateAgePerson: (rep, res) => {
+    PersonService.getPersonById(parseInt(rep.params.id)).then((data) => {
+      console.log(data[0].dataValues.age + 1)
+      // if (data[0].dataValues.age <= 120) {
+      //   data[0].dataValues.age = parseInt(data[0].dataValues.age) + 1
+      //   PersonService.updateAgePersonById(data[0]).then(() => {
+      //     res.status(CodeAPI[200]).send({
+      //       result: true
+      //     })
+      //   }, () => {
+      //     return res.status(CodeAPI[400]).send({
+      //       result: false
+      //     })
+      //   })
+      // } else {
+      //   return res.status(CodeAPI[404]).send({
+      //     message: false
+      //   })
+      // }
+    }, (error) => {
+      res.status(CodeAPI[500]).send({
+        message: error.message
       })
-    }
+    })
   }
 }

@@ -1,8 +1,5 @@
 import AppConf from './config/application'
-
-// setting router
 import indexRouter from './routes/index'
-import usersRouter from './routes/users'
 import personRouter from './routes/person'
 const createError = require('http-errors')
 const express = require('express')
@@ -36,7 +33,6 @@ app.use(cors({
 
 // setting Router
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
 app.use('/person', personRouter)
 
 // catch 404 and forward to error handler

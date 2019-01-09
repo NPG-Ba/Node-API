@@ -5,6 +5,9 @@ const router = Express.Router()
 /* GET all person in DB */
 router.get('/', PersonController.getAllPerson)
 
+/* GET all person in DB */
+// router.get('/:page(\\d+)', PersonController.getAllPerson)
+
 /* Get person where id = min and page = pageCurrent + 1  in DB */
 router.get('/:page(\\d+)/:id(\\d+)', PersonController.getAllPersonByIdOrPage)
 
@@ -21,5 +24,5 @@ router.put('/:id(\\d+)', PersonController.updatePerson)
 router.delete('/:id(\\d+)', PersonController.deletePerson)
 
 /* Update age person in DB */
-router.put('/:id(\\d+)/age', PersonController.updateAgePerson)
+router.put('/age/:id(\\d+)', PersonController.updateAgePerson)
 module.exports = router
