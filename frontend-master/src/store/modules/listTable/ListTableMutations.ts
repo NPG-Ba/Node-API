@@ -23,6 +23,10 @@ export function agePerson(state: ListTableState, index: number) {
     state.items[index].age = parseInt(state.items[index].age) + 1;
 }
 
+export function agePersonSub(state: ListTableState, index: number) {
+    state.items[index].age = parseInt(state.items[index].age) - 1;
+}
+
 export function setTableProcessing(state: ListTableState, isLoading: boolean) {
     state.isProcessing = isLoading;
 }
@@ -40,6 +44,7 @@ export default {
     add,
     deletePerson,
     agePerson,
+    agePersonSub,
     append,
     setTableProcessing,
     setTotalPage,

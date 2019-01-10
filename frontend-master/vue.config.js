@@ -1,5 +1,6 @@
 module.exports = {
   lintOnSave: false,
+
   devServer: {
     proxy: {
       '/api': {
@@ -10,6 +11,15 @@ module.exports = {
           '/api': '/'
         }
       }
+    }
+  },
+
+  pluginOptions: {
+    i18n: {
+      locale: 'ja',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: true
     }
   }
 }

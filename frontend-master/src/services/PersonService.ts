@@ -23,8 +23,15 @@ export class PersonService {
             params,
         });
     }
+
     public up(params: any): Promise<any> {
-        return ApiService.put('/person/age/' + parseInt(params[0]), {
+        return ApiService.put('/person/' + parseInt(params[0]) + '/age', {
+            params,
+        });
+    }
+
+    public down(params: any): Promise<any> {
+        return ApiService.put('/person/' + parseInt(params[0]) + '/agedown', {
             params,
         });
     }

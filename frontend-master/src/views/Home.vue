@@ -3,7 +3,6 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					{{ $t('lang.components.home.placeholder.welcome') }}
 					<FormComponent></FormComponent>
 				</div>
 			</div>

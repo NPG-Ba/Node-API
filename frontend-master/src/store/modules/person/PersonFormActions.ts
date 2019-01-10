@@ -22,9 +22,21 @@ export function updateAge(store: ActionContext<PersonFormState, any>, params?: a
             // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
             store.commit('agePerson', params[1]);
         }).finally(() => {
-            console.log('Delete susccess !');
+            console.log('Update age+ susccess !');
         });
 }
+
+export function updateAgeSub(store: ActionContext<PersonFormState, any>, params?: any) {
+    // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
+    return new PersonService().down(params).then((resp) => {
+        // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
+        store.commit('agePersonSub', params[1]);
+    }).finally(() => {
+        console.log('Update age- success !');
+    });
+}
+
+
 export function deletePerson(store: ActionContext<PersonFormState, any>, params?: any) {
     // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
     return new PersonService().delete(params).then((resp) => {
@@ -37,5 +49,6 @@ export function deletePerson(store: ActionContext<PersonFormState, any>, params?
 export default {
     save,
     updateAge,
+    updateAgeSub,
     deletePerson,
 } as ActionTree<PersonFormState, any>;
