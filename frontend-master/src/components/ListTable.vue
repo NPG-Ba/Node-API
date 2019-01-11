@@ -1,72 +1,80 @@
 <template>
   <div class="container" style="margin-top:20px;">
-        <b-table  responsive
-                  :fixed="fixed"
-                  :hover="hover"
-                  :items="items" 
-                  :fields="fields1"
-                  @row-hovered="myRowClickHandler"
-                  >
-            <template slot="nameage" slot-scope="data">
-              {{data.item.name}} ({{data.item.age}})
-            </template>
-            <span slot="comment" slot-scope="data" v-html="data.value">     
-            </span>
-              <template slot="action" slot-scope="props">
-                <b-button v-if="props.value >= 119" :disabled="true" class="btn btn-primary btn-sm btn-addold"  v-on:click="updateAgePerson(props)">+1</b-button>
-                <b-button v-else :disabled="false" class="btn btn-primary btn-sm btn-addold"  v-on:click="updateAgePerson(props)">+1</b-button>
-                <b-button v-if="props.value <= 15" :disabled="true" class="btn btn-primary btn-sm"  v-on:click="updateAgePersonSub(props)">-1</b-button>
-                <b-button v-else :disabled="false" class="btn btn-primary btn-sm"  v-on:click="updateAgePersonSub(props)">-1</b-button>
-                <b-button b-btn v-b-modal.modalPrevent size="sm" v-on:click="info(props.item, props.index)" class="mr-1">{{$t('table.button.delete')}}</b-button>
-              </template>
-        </b-table>
-        <p v-if="isProcessing">Loading...</p>
+    <b-table responsive :fixed="fixed" :hover="hover" :items="items" :fields="fields1">
+      <template slot="nameage" slot-scope="data">{{data.item.name}} ({{data.item.age}})</template>
+      <span slot="comment" slot-scope="data" v-html="data.value"></span>
+      <template slot="action" slot-scope="props">
+        <b-button v-if="props.value >= 119" :disabled="true" class="btn btn-primary btn-sm btn-addold" v-on:click="upAge(props)">+1</b-button>
+        <b-button v-else :disabled="false" class="btn btn-primary btn-sm btn-addold">+1</b-button>
+        <b-button  v-if="props.value <= 15" :disabled="true" class="btn btn-primary btn-sm"  v-on:click="downAge(props)">-1</b-button>
+        <b-button v-else :disabled="false" class="btn btn-primary btn-sm">-1</b-button>
+        <b-button b-btn v-b-modal.modalPrevent  size="sm"  v-on:click="info(props.item, props.index)"  class="mr-1"  >{{$t('table.button.delete')}}</b-button>
+      </template>
+    </b-table>
+    <p v-if="isProcessing">Loading...</p>
     <div class="row justify-content-md-left">
-        <div class="col-6 col-sm-12 col-md-6" style="text-align: right;">
-          <b-button :disabled= isDisabled variant="secondary" size="sm" v-on:click="morePerson($event)">{{$t('button.more')}}</b-button>
-        </div>
+      <div class="col-6 col-sm-12 col-md-6" style="text-align: right;">
+        <b-button  :disabled="isDisabled"  class="btn btn-primary btn-sm" v-show="!isMore"  v-on:click="morePerson($event)" >{{$t('button.more')}}</b-button>
+      </div>
     </div>
-     <!--Modal-->
-    <b-modal id="modalPrevent"
-             ref="modal"
-             title="Submit your name"
-             @ok="handleOk(modalInfo.content,$event)">
-      <pre>{{ modalInfo.content }}</pre>
+    <!--Modal-->
+    <b-modal id="modalPrevent" ref="modal"  title="Are you delete ?"  @ok="handleOk(modalInfo.content,$event,modalInfo.title)">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">{{$t('form.input.name')}}</th>
+              <th scope="col">{{$t('form.input.age')}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td><b-badge variant="warning">{{ modalInfo.content.name }}</b-badge></td>
+              <td><b-badge variant="warning">{{ modalInfo.content.age }}</b-badge></td>
+            </tr>
+          </tbody>
+        </table>
     </b-modal>
   </div>
 </template>
 
 <script lang='ts'>
-import { PersonService } from '@/services/PersonService';
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { FormResponse } from '@/models/http/FormResponse';
-import { MyHttpResponse } from '@/models/http/Response';
-import index from '@/store';
-import i18n from '@/i18n';
+import { PersonService } from "@/services/PersonService";
+import { State, Getter, Action, Mutation } from "vuex-class";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { FormResponse } from "@/models/http/FormResponse";
+import { MyHttpResponse } from "@/models/http/Response";
+import index from "@/store";
+import i18n from "@/i18n";
 
 @Component
 export default class ListTableComponent extends Vue {
+
+  @State(state => state.listTable.isMore) public isMore?: boolean;
+  // Init đối tượng service
+  public personService = new PersonService();
 
   // modal begin
   public modalInfo = { title: "", content: "" };
 
   public resetModal() {
-    this.modalInfo.title = "";
-    this.modalInfo.content = "";
+    this.$root.$emit("bv::hide::modal", "modalInfo");
   }
 
   public info(item: any, index: any) {
-    this.modalInfo.title = `Row index: ${index}`;
+    this.modalInfo.title = `${index}`;
     this.modalInfo.content = item;
+    // hiện modal
     this.$root.$emit("bv::show::modal", "modalInfo");
-    }
+  }
 
-     public handleOk (data:any, evt:any) {
-      // Prevent modal from closing
-      evt.preventDefault()
-       console.log(`${data}`)
-       //this.deletePerson(parseInt(data.id));
-    }
+  public handleOk(data: any, evt: any, index: any) {
+    // delete
+    this.$store.dispatch("deletePerson", [data.id, parseInt(index)]);
+    // ẩn modal
+    this.$root.$emit("bv::hide::modal", "modalInfo");
+  }
   // End modal
 
   // get item cho table
@@ -77,7 +85,7 @@ export default class ListTableComponent extends Vue {
     // Lấy id nhỏ nhất trong table
     this.idMin = this.$store.state.listTable.idMin;
 
-     // Lấy max page
+    // Lấy max page
     this.maxPage = this.$store.state.listTable.totalPage;
 
     // Lấy data cho table
@@ -88,20 +96,17 @@ export default class ListTableComponent extends Vue {
     return this.$store.state.listTable.isProcessing;
   }
 
-  // Init đối tượng service
-  public personService = new PersonService();
-
   // Trạng thái state
   public saveStatue: boolean | null = null;
 
-  public saveMessage: string = '';
-  
+  public saveMessage: string = "";
+
   // Setting header table
   public fields1 = [
-                    { key: 'nameage', label: i18n.messages.ja.header.name_age },
-                    { key: 'comment' ,label: i18n.messages.ja.header.comment },
-                    { key: 'action' ,label: i18n.messages.ja.header.action , class: 'colum-age'}
-                    ];
+    { key: "nameage", label: 'i18n.messages.ja.header.name_age' },
+    { key: "comment", label: 'i18n.messages.ja.header.comment' },
+    { key: "action", label: 'i18n.messages.ja.header.action', class: "colum-age" }
+  ];
   // Setting table lúc hover vào rows
   private hover = true;
 
@@ -123,61 +128,57 @@ export default class ListTableComponent extends Vue {
   // Trạng thái của button
   private isDisabled = false;
 
-  public myRowClickHandler(recor   :any, index  :any) {
-    this.index =index; // This will be the item data for the row
-  }
-
   // Init table => dổ dữ liệu vào table
   public mounted() {
-     this.$store.dispatch('init');
+    this.$store.dispatch("init");
   }
 
   // Method update age+ with id
-  public updateAgePerson(data  :any) {
-    this.$store.dispatch('updateAge' ,[data.item.id ,data.index]);
+  public upAge(data: any) {
+    this.$store.dispatch("upAge", [data.item.id, data.index]);
   }
 
   // Method update age- with id
-  public updateAgePersonSub(data  :any) {
-    this.$store.dispatch('updateAgeSub' ,[data.item.id ,data.index]);
-  }
-
-  // Method delete person with id
-  public deletePerson(data  :any) {
-    this.$store.dispatch('deletePerson' ,[data.item.id ,data.index]);
+  public downAge(data: any) {
+    if (parseInt(data.item.age) > 15) {
+      this.$store.dispatch("downAge", [data.item.id, data.index]);
+    }
+    {
+      alert("Age requie > 15");
+    }
   }
 
   // get more data with id ang page
-  public morePerson(event : any){
-    event.preventDefault()
-    if((this.currentPage +1) <= this.maxPage)
-    {
-       this.isDisabled = false;
-       this.$store.dispatch('morePerson',[this.currentPage + 1,this.idMin]);
-    }else{
-       this.isDisabled = true;
-    }
+  public morePerson(event: any) {
+    event.preventDefault();
+    this.$store.dispatch("morePerson", this.idMin);
   }
 }
 </script>
 <style lang="scss">
-  table{
-    text-align: center;
-  }
-  .btn-secondary {
-    margin-right: 20px;
+table {
+  text-align: center;
 }
-.btn-addold{
+.btn-secondary {
+  margin-right: 20px;
+}
+.btn-addold {
   margin-left: 30px;
 }
 
-@media (min-width: 1200){
- .colum-age{
-  width: 15%;
+@media (min-width: 1200) {
+  .colum-age {
+    width: 15%;
+  }
+  .action {
+    width: 15%;
+  }
 }
-.action{
-  width: 15%;
+.table thead th {
+    vertical-align: bottom;
 }
+.table th, .table td {
+    border-top: 0px solid #dee2e6 !important; 
 }
 </style>
 

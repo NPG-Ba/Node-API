@@ -6,18 +6,17 @@
     "title": "個人用フォーム",
     "buttons": {
       "add": "新しく",
-      "cancel" : "キャンセル"
+      "cancel": "キャンセル"
     },
-
     "input": {
       "name": "お名前",
       "age": "年齢",
-      "comment" : "コメント"
+      "comment": "コメント"
     },
     "messages": {
       "name_required": "名前フィールドは必須です。",
       "age_required": "年齢欄は必須です。",
-      "comment_required" : "コメント欄は必須です。"
+      "comment_required": "コメント欄は必須です。"
     }
   },
   "table": {
@@ -31,6 +30,6 @@
   "header": {
     "name_age": "お名前と年齢",
     "comment": "コメント",
-    "action" :"アクション"
+    "action": "アクション"
   }
 }

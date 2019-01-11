@@ -21,7 +21,7 @@ Vue.use(FlagIcon);
 Vue.config.productionTip = false;
 ApiService.init('/api');
 i18n.locale = index.getters.getlang
-console.log(index.getters.getlang)
+
 new Vue({
   router,
   store,

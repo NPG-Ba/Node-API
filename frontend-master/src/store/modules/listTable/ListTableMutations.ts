@@ -19,11 +19,11 @@ export function deletePerson(state: ListTableState, index: number) {
       state.items.splice(index, 1);
 }
 
-export function agePerson(state: ListTableState, index: number) {
+export function setTableUpAge(state: ListTableState, index: number) {
     state.items[index].age = parseInt(state.items[index].age) + 1;
 }
 
-export function agePersonSub(state: ListTableState, index: number) {
+export function setTableDownAge(state: ListTableState, index: number) {
     state.items[index].age = parseInt(state.items[index].age) - 1;
 }
 
@@ -39,15 +39,19 @@ export function setTotalPage(state: ListTableState, totalPage: number) {
 export function setIdMin(state: ListTableState, id: number) {
     state.idMin = id;
 }
+export function setMore(state: ListTableState, isMore: boolean) {
+    state.isMore = isMore;
+}
 export default {
     prepend,
     add,
     deletePerson,
-    agePerson,
-    agePersonSub,
+    setTableUpAge,
+    setTableDownAge,
     append,
     setTableProcessing,
     setTotalPage,
     setCurrentPage,
     setIdMin,
+    setMore,
 } as MutationTree<ListTableState>;

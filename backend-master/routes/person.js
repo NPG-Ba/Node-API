@@ -24,5 +24,9 @@ router.post('/', PersonController.addNewPerson)
 router.delete('/:id(\\d+)', PersonController.deletePerson)
 
 /* Update age person in DB */
-router.put('/age/:id(\\d+)', PersonController.updateAgePerson)
+router.put('/age-up/:id(\\d+)', PersonController.updateAgePerson)
+
+/* Update age person in DB */
+router.put('/age-down/:id(\\d+)', PersonController.updateAgePerson)
+
 module.exports = router

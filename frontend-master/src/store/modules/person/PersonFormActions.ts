@@ -3,37 +3,48 @@ import { PersonFormState } from './PersonFormState';
 import { Person } from '@/models/Person';
 import { PersonService } from '@/services/PersonService';
 import { MyHttpResponse } from '@/models/http/Response';
+import index from '@/router';
 
 export function save(store: ActionContext<PersonFormState, any>,
                      formData: Person) {
-    store.commit('setProcessing', true);
+   store.commit('setProcessing', true);
     return new PersonService().save(formData)
     .then((resp) => {
         // Thêm mới thành công thì sẽ làm TODO
         store.commit('add', resp.data.data);
-    })
-    .finally(() => {
+    }).catch(e => {
+        // Nếu sinh lỗi 
+        index.push('/server-error')
+    }).finally(()=>{
         store.commit('setProcessing', false);
-    });
+    })
 }
-export function updateAge(store: ActionContext<PersonFormState, any>, params?: any) {
+export function upAge(store: ActionContext<PersonFormState, any>, params?: any) {
         // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
         return new PersonService().up(params).then((resp) => {
             // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
-            store.commit('agePerson', params[1]);
-        }).finally(() => {
-            console.log('Update age+ susccess !');
-        });
+            store.commit('setTableUpAge', params[1]);
+        }).catch(e => {
+            // Nếu sinh lỗi 
+            index.push('/server-not-found')
+        }).finally(()=>{
+            console.log('upAge')
+        })
 }
 
-export function updateAgeSub(store: ActionContext<PersonFormState, any>, params?: any) {
+export function downAge(store: ActionContext<PersonFormState, any>, params?: any) {
     // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
     return new PersonService().down(params).then((resp) => {
         // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
-        store.commit('agePersonSub', params[1]);
-    }).finally(() => {
-        console.log('Update age- success !');
-    });
+        console.log(params[1])
+        store.commit('setTableDownAge', params[1]);
+        console.log(params[1])
+    }).catch(e => {
+        // Nếu sinh lỗi 
+        index.push('/server-not-found')
+    }).finally(()=>{
+        console.log('dowAge')
+    })
 }
 
 
@@ -42,13 +53,16 @@ export function deletePerson(store: ActionContext<PersonFormState, any>, params?
     return new PersonService().delete(params).then((resp) => {
         // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
         store.commit('deletePerson', params[1]);
-    }).finally(() => {
-        console.log('Delete susccess !');
-    });
+    }).catch(e => {
+        // Nếu sinh lỗi 
+        index.push('/server-not-found')
+    }).finally(()=>{
+        console.log('delete')
+    })
 }
 export default {
     save,
-    updateAge,
-    updateAgeSub,
+    upAge,
+    downAge,
     deletePerson,
 } as ActionTree<PersonFormState, any>;

@@ -13,8 +13,9 @@ export class PersonService {
             params,
         });
     }
-    public more(params: any): Promise<any> {
-        return ApiService.get(`/person/` + params[0] + '/' + params[1], {
+    public more(pageCurrent: any,params: any): Promise<any> {
+        
+        return ApiService.get(`/person/` + pageCurrent + '/' + params, {
             params,
         });
     }
@@ -25,13 +26,13 @@ export class PersonService {
     }
 
     public up(params: any): Promise<any> {
-        return ApiService.put('/person/' + parseInt(params[0]) + '/age', {
+        return ApiService.put('/person/age-up/' + parseInt(params[0]), {
             params,
         });
     }
 
     public down(params: any): Promise<any> {
-        return ApiService.put('/person/' + parseInt(params[0]) + '/agedown', {
+        return ApiService.put('/person/age-down/' + parseInt(params[0]), {
             params,
         });
     }

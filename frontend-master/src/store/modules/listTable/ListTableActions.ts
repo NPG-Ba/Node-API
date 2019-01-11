@@ -1,36 +1,50 @@
 import { Store, ActionTree, ActionContext } from 'vuex';
 import { ListTableState } from './ListTableState';
 import { PersonService } from '@/services/PersonService';
+import index from '@/router';
 
 export function init(store: ActionContext<ListTableState, any>,
-                     params?: any) {
-    store.commit('setTableProcessing', true);
+    params?: any) {
     return new PersonService().init(params)
         .then((resp) => {
             store.commit('append', resp.data.data);
             store.commit('setTotalPage', resp.data.pages);
             store.commit('setCurrentPage', 1);
             store.commit('setIdMin', resp.data.data[resp.data.data.length - 1].id);
+            console.log(resp.data.pages)
+            console.log(store.state.isMore)
+            console.log(store.state.currentPage)
+            if(parseInt(resp.data.pages)=== 1)
+            {
+                store.commit('setMore', true);
+            }
+        }).catch(e => {
+            // Nếu sinh lỗi 
+            index.replace('/server-error')
+        }).finally(() => {
+            store.commit('setProcessing', false);
         })
-        .finally(() => {
-            store.commit('setTableProcessing', false);
-        });
 }
 
-export function morePerson(store: ActionContext<ListTableState, any>,
-                           params?: any) {
 
-            store.commit('setTableProcessing', true);
-            return new PersonService().more(params)
-            .then((resp) => {
+export function morePerson(store: ActionContext<ListTableState, any>,
+    params?: any) {
+    return new PersonService().more((store.state.currentPage + 1),params)
+        .then((resp) => {
             store.commit('prepend', resp.data.data);
-            store.commit('setTotalRows', resp.data.length);
-            store.commit('setCurrentPage', params[0]);
+            store.commit('setCurrentPage', store.state.currentPage + 1);
             store.commit('setIdMin', resp.data.data[resp.data.data.length - 1].id);
-            })
-            .finally(() => {
-            store.commit('setTableProcessing', false);
-            });
+            
+            if(store.state.currentPage == store.state.totalPage)
+            {
+                store.commit('setMore', true);
+            }
+        }).catch(e => {
+            // Nếu sinh lỗi 
+            index.push('/server-error')
+        }).finally(() => {
+            store.commit('setProcessing', false);
+        })
 }
 
 export default {

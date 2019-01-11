@@ -6,17 +6,17 @@
     "title": "Person Form",
     "buttons": {
       "add": "Add",
-      "cancel" : "Cancel"
+      "cancel": "Cancel"
     },
     "input": {
       "name": "Name",
       "age": "Age",
-      "comment" : "Comment"
+      "comment": "Comment"
     },
     "messages": {
       "name_required": "The name field is required.",
       "age_required": "The age field is required.",
-      "comment_required" : "The comment field is required."
+      "comment_required": "The comment field is required."
     }
   },
   "table": {
@@ -30,6 +30,6 @@
   "header": {
     "name_age": "Name and age",
     "comment": "Comment",
-    "action" :"Action"
+    "action": "Action"
   }
 }

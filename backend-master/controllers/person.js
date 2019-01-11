@@ -183,7 +183,6 @@ module.exports = {
   },
 
   // update age person id
-
   updateAgePerson: (rep, res) => {
     let id = parseInt(rep.params.id)
     PersonService.getPersonById(id).then((data) => {
@@ -196,7 +195,7 @@ module.exports = {
       }
       else{
         let age = parseInt(data[0].dataValues.age + 1);
-        if (age <= 150) {
+        if (age <= 149) {
          var isResult =  PersonService.updateAgePersonById(id,age)
           if(isResult===1){
             res.status(CodeAPI[200]).send({
@@ -214,7 +213,44 @@ module.exports = {
           })
         }
       }
-      
+    }, (error) => {
+      res.status(CodeAPI[500]).send({
+        message: error.message
+      })
+    })
+  },
+
+  // down age
+  downAgePerson: (rep, res) => {
+    let id = parseInt(rep.params.id)
+    PersonService.getPersonById(id).then((data) => {
+      // No data
+      if(data.length === 0)
+      {
+        res.status(CodeAPI[500]).send({
+          message: 'Not update'
+        })
+      }
+      else{
+        let age = parseInt(data[0].dataValues.age - 1);
+        if (age >= 15) {
+         var isResult =  PersonService.updateAgePersonById(id,age)
+          if(isResult===1){
+            res.status(CodeAPI[200]).send({
+              result: true
+            })
+          } else 
+          {
+            res.status(CodeAPI[204]).send({
+              result: false
+            })
+          }
+        } else {
+          return res.status(CodeAPI[404]).send({
+            message: 'Check input age'
+          })
+        }
+      }
     }, (error) => {
       res.status(CodeAPI[500]).send({
         message: error.message

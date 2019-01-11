@@ -10,16 +10,25 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'list-person',
       component: Home,
     },
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     },
+    {
+      path: '/server-error',
+      name: 'server-error',
+      // serve error
+      component: () => import(/* webpackChunkName: "500" */ './views/ErrorPage/500.vue'),
+    },
+    {
+      path: '/server-not-found',
+      name: 'server-not-found',
+      // serve not found
+      component: () => import(/* webpackChunkName: "404" */ './views/ErrorPage/404.vue'),
+    }
   ],
 });
