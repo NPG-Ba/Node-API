@@ -11,9 +11,6 @@ export function init(store: ActionContext<ListTableState, any>,
             store.commit('setTotalPage', resp.data.pages);
             store.commit('setCurrentPage', 1);
             store.commit('setIdMin', resp.data.data[resp.data.data.length - 1].id);
-            console.log(resp.data.pages)
-            console.log(store.state.isMore)
-            console.log(store.state.currentPage)
             if(parseInt(resp.data.pages)=== 1)
             {
                 store.commit('setMore', true);

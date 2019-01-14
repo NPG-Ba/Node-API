@@ -25,11 +25,17 @@
     }
   },
   "button": {
-    "more": "more"
+    "more": "More"
   },
   "header": {
     "name_age": "Name and age",
     "comment": "Comment",
     "action": "Action"
-  }
+  },
+  "dialog" : {
+    "title" : " Do you want to delete ?",
+    "oke"   : "OK",
+    "cancel" : "Cancel"
+  },
+  "save" : "Save success"
 }

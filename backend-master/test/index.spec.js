@@ -1,8 +1,8 @@
 import { describe, it, before } from 'mocha'
 import { expect, assert } from 'chai'
 import * as sequelizeFixtures from 'sequelize-fixtures'
-import model from '../db/models'
-let server = require('../bin/www')
+import model from '../src/db/models'
+let server = require('../src/bin/www')
 const request = require('supertest')
 
 describe('Person API Testing', function () {

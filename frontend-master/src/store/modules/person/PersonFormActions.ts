@@ -4,6 +4,7 @@ import { Person } from '@/models/Person';
 import { PersonService } from '@/services/PersonService';
 import { MyHttpResponse } from '@/models/http/Response';
 import index from '@/router';
+import { Script } from 'vm';
 
 export function save(store: ActionContext<PersonFormState, any>,
                      formData: Person) {
@@ -11,7 +12,7 @@ export function save(store: ActionContext<PersonFormState, any>,
     return new PersonService().save(formData)
     .then((resp) => {
         // Thêm mới thành công thì sẽ làm TODO
-        store.commit('add', resp.data.data);
+        store.commit('init', resp.data.data);
     }).catch(e => {
         // Nếu sinh lỗi 
         index.push('/server-error')

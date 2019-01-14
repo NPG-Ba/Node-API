@@ -5,7 +5,6 @@ import AppConf from '../config/application'
 import CodeAPI from '../models/response/codes'
 
 module.exports = {
-
   // get all person
   getAllPerson: (req, res) => {
     let limit = AppConf.page.default
@@ -106,7 +105,6 @@ module.exports = {
       return true
     })
     if (result) {
-      data.comment = '<p>' + data.comment.split('\n').join('</p><p>') + '</p>'
       PersonService.addNewPerson(data).then((data) => {
         res.status(CodeAPI[200]).send({
           data: data.dataValues

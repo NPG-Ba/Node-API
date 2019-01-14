@@ -2,13 +2,13 @@
   <div class="container" style="margin-top:20px;">
     <b-table responsive :fixed="fixed" :hover="hover" :items="items" :fields="fields1">
       <template slot="nameage" slot-scope="data">{{data.item.name}} ({{data.item.age}})</template>
-      <span slot="comment" slot-scope="data" v-html="data.value"></span>
+      <pre slot="comment" slot-scope="data" v-html="data.value"></pre>
       <template slot="action" slot-scope="props">
-        <b-button v-if="props.value >= 119" :disabled="true" class="btn btn-primary btn-sm btn-addold" v-on:click="upAge(props)">+1</b-button>
-        <b-button v-else :disabled="false" class="btn btn-primary btn-sm btn-addold">+1</b-button>
-        <b-button  v-if="props.value <= 15" :disabled="true" class="btn btn-primary btn-sm"  v-on:click="downAge(props)">-1</b-button>
-        <b-button v-else :disabled="false" class="btn btn-primary btn-sm">-1</b-button>
-        <b-button b-btn v-b-modal.modalPrevent  size="sm"  v-on:click="info(props.item, props.index)"  class="mr-1"  >{{$t('table.button.delete')}}</b-button>
+        <b-button v-if="props.value >= 145" :disabled="true" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)">+1</b-button>
+        <b-button v-else :disabled="false" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)" >+1</b-button>
+        <b-button  v-if="props.value <= 14" :disabled="true" class="btn btn-primary btn-sm"  @click="downAge(props)">-122</b-button>
+        <b-button v-else :disabled="false" class="btn btn-primary btn-sm" @click="downAge(props)">-1</b-button>
+        <b-button b-btn v-b-modal.modalPrevent  size="sm"  v-on:click="info(props.item, props.index)"  class="mr-1">{{$t('table.button.delete')}}</b-button>
       </template>
     </b-table>
     <p v-if="isProcessing">Loading...</p>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <!--Modal-->
-    <b-modal id="modalPrevent" ref="modal"  title="Are you delete ?"  @ok="handleOk(modalInfo.content,$event,modalInfo.title)">
+    <b-modal id="modalPrevent" ref="modal"  v-bind:ok-title="$t('dialog.oke')" v-bind:title="$t('dialog.title')" v-bind:cancel-title="$t('dialog.cancel')"  @ok="handleOk(modalInfo.content,$event,modalInfo.title)"> 
         <table class="table table-hover">
           <thead>
             <tr>
@@ -30,8 +30,8 @@
           <tbody>
             <tr>
               <th scope="row">1</th>
-              <td><b-badge variant="warning">{{ modalInfo.content.name }}</b-badge></td>
-              <td><b-badge variant="warning">{{ modalInfo.content.age }}</b-badge></td>
+              <td>{{ modalInfo.content.name }}</td>
+              <td>{{ modalInfo.content.age }}</td>
             </tr>
           </tbody>
         </table>
@@ -103,9 +103,9 @@ export default class ListTableComponent extends Vue {
 
   // Setting header table
   public fields1 = [
-    { key: "nameage", label: 'i18n.messages.ja.header.name_age' },
-    { key: "comment", label: 'i18n.messages.ja.header.comment' },
-    { key: "action", label: 'i18n.messages.ja.header.action', class: "colum-age" }
+    { key: "nameage", label: '' },
+    { key: "comment", label: '' },
+    { key: "action", label: '', class: "colum-age" }
   ];
   // Setting table lúc hover vào rows
   private hover = true;
@@ -117,7 +117,7 @@ export default class ListTableComponent extends Vue {
   private currentPage = 0;
 
   // Id Min nhỏ nhất
-  private idMin = 0;
+  private idMin = 1;
 
   // số lượng page tối đa
   private maxPage = 0;
@@ -135,16 +135,23 @@ export default class ListTableComponent extends Vue {
 
   // Method update age+ with id
   public upAge(data: any) {
-    this.$store.dispatch("upAge", [data.item.id, data.index]);
+    console.log(data.item.age)
+    if (parseInt(data.item.age) < 149) {
+      this.$store.dispatch("upAge", [data.item.id, data.index]);
+    }else
+    {
+      alert("Age requie < 150");
+    }
   }
 
   // Method update age- with id
   public downAge(data: any) {
     if (parseInt(data.item.age) > 15) {
       this.$store.dispatch("downAge", [data.item.id, data.index]);
-    }
+    }else
     {
       alert("Age requie > 15");
+
     }
   }
 
@@ -180,5 +187,17 @@ table {
 .table th, .table td {
     border-top: 0px solid #dee2e6 !important; 
 }
+  pre {
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  font-family: 'Avenir', Helvetica, Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  }
 </style>
 

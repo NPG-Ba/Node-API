@@ -1,7 +1,4 @@
 import { Person } from '@/models/Person';
-import { FormResponse } from '@/models/http/FormResponse';
-import { MyHttpResponse } from '@/models/http/Response';
-import { Error } from '@/models/http/Error';
 import { ApiService } from '@/services/ApiService';
 
 export class PersonService {

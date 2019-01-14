@@ -10,11 +10,13 @@
         <flag iso="jp"/>
       </b-button>
     </template>
-    <div class="alert mt-3" v-bind:class='{ "alert-success": saveStatue, "alert-warning": !saveStatue }' role="alert" v-show="saveStatue !== null">{{saveMessage}}</div>
+      <b-alert :show="dismissCountDown" dismissible variant="warning" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
+        {{$t('save')}}
+      </b-alert>
     <form @submit.prevent="onSubmit" v-if="show" autocomplete="false" name="form" @reset="onReset">
       <div class="form-group mt-3">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm" >{{$t('form.input.name')}}</label>
-        <b-form-input class="form-control input-small" name="name" v-model="name" v-validate="{required: true, min:3, max:10, regex:/[^\p{L}\s_\d]+$/i }" autocomplete="false"></b-form-input>
+        <b-form-input class="form-control input-small" name="name" v-model="name" v-validate="{required: true, min:3, max:10, regex:/[^\p{L}\s_]+$/i }" autocomplete="false"></b-form-input>
         <p v-if='errors.has("name")'>{{$t('form.messages.name_required')}}</p>
       </div>
       <div class="form-group">
@@ -57,8 +59,6 @@ const namespace: string = "personForm";
   components: { ValidationObserver }
 })
 export default class FormComponent extends Vue {
-  public saveStatue: boolean | null = null;
-  public saveMessage: string = "";
   public show = true;
 
   @State(state => state.personForm.isProcessing) public isLoading?: boolean;
@@ -71,25 +71,20 @@ export default class FormComponent extends Vue {
   set name(val: string) {
     this.$store.commit("setName", val);
   }
+
+  // alert
+    private dismissSecs = 2
+    private  dismissCountDown = 0
+
   //submit  form
   public onSubmit() {
-    this.saveStatue = null;
+
     this.$validator.validateAll().then(result => {
       if (result) {
-        this.$store
-          .dispatch(
-            "save",
-            new Person(
-              this.name,
-              this.age || 15,
-              this.escapeOutput(this.comment)
-            )
-          )
+        this.$store.dispatch("save",new Person(this.name,this.age || 15,this.escapeOutput(this.comment)))
           .then(
             (success: FormResponse) => {
               // reset lại id min
-              this.saveStatue = true;
-              this.saveMessage = "Save success ";
               this.$store.state.listTable.idMin = this.$store.state.listTable.idMin + 1;
               this.name = "";
               this.age = 0;
@@ -97,12 +92,13 @@ export default class FormComponent extends Vue {
               this.$validator.reset();
             },
             (error: MyHttpResponse) => {
-              this.saveStatue = true;
-              this.saveMessage = "Save fail ";
             }
-          );
+          ).finally(()=>{
+             this.dismissCountDown = this.dismissSecs
+          });
       }
     });
+    
   }
   //set lang jp
   public setLangJP() {
@@ -137,6 +133,11 @@ export default class FormComponent extends Vue {
       .replace(/\'/g, "&#x27")
       .replace(/\//g, "&#x2F");
   }
+  // alert
+
+  public countDownChanged (dismissCountDown :any) {
+      this.dismissCountDown = dismissCountDown
+    }
 }
 </script>
 <style lang="scss">

@@ -8,6 +8,6 @@ export class ListTableState {
     constructor() {
         this.isProcessing = false;
         this.isMore = false;
-        this.currentPage =1
+        this.currentPage = 1
     }
 }
