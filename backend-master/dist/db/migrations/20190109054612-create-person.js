@@ -4,21 +4,21 @@ module.exports = {
   up: function up(queryInterface, Sequelize) {
     return queryInterface.createTable('People', {
       id: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
       name: {
         type: Sequelize.STRING({
-          allowNull: false,
+          allowNull: true,
           min: 1,
           max: 10
         })
       },
       age: {
         type: Sequelize.INTEGER({
-          allowNull: false,
+          allowNull: true,
           min: 15,
           max: 150
         })

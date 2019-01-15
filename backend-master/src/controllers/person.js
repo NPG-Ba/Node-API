@@ -220,6 +220,7 @@ module.exports = {
 
   // down age
   downAgePerson: (rep, res) => {
+    rep.method ==='PUT'
     let id = parseInt(rep.params.id)
     PersonService.getPersonById(id).then((data) => {
       // No data

@@ -13,10 +13,10 @@ module.exports = {
     'logging': false
   },
   'production': {
-    'username': 'root',
-    'password': null,
-    'database': 'database_production',
-    'host': '127.0.0.1',
+    'username': 'b21a832c6027c9',
+    'password': 'a3beb530',
+    'database': 'heroku_0506b6b683b840a',
+    'host': 'eu-cdbr-west-02.cleardb.net',
     'dialect': 'mysql',
     'operatorsAliases': false
   }
