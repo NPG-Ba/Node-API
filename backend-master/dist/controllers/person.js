@@ -161,7 +161,7 @@ module.exports = {
             });
           }
         } else {
-          return res.status(_codes.default[404]).send({
+          return res.status(_codes.default[400]).send({
             message: 'Check input age'
           });
         }
@@ -172,7 +172,7 @@ module.exports = {
       });
     });
   },
-  // down age
+  // down age person id
   downAgePerson: function downAgePerson(rep, res) {
     var id = parseInt(rep.params.id);
     PersonService.getPersonById(id).then(function (data) {

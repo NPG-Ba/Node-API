@@ -75,7 +75,7 @@ module.exports = {
         })
       }
   },
-  
+
   // add a new employeee
 
   addNewPerson: (rep, res) => {
@@ -155,7 +155,7 @@ module.exports = {
             })
           }
         } else {
-          return res.status(CodeAPI[404]).send({
+          return res.status(CodeAPI[400]).send({
             message: 'Check input age'
           })
         }

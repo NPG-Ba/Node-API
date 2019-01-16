@@ -72,9 +72,9 @@ function deletePersonById(id) {
 } // update age person
 
 
-function updatePerson(id, inputAge) {
+function updatePerson(id, inputage) {
   _models.default.Person.update({
-    age: inputAge
+    age: inputage
   }, {
     where: {
       id: id
