@@ -9,8 +9,7 @@ exports.getAllPersonWhereById = getAllPersonWhereById;
 exports.getPersonById = getPersonById;
 exports.addNewPerson = addNewPerson;
 exports.deletePersonById = deletePersonById;
-exports.updatePersonById = updatePersonById;
-exports.updateAgePersonById = updateAgePersonById;
+exports.updatePerson = updatePerson;
 
 var _models = _interopRequireDefault(require("../db/models"));
 
@@ -70,26 +69,13 @@ function deletePersonById(id) {
       id: id
     }
   });
-} // update person with id
-
-
-function updatePersonById(person, data) {
-  person.forEach(function (e) {
-    e.update({
-      name: data.name ? data.name : e.name,
-      age: data.age ? data.age : e.age,
-      comment: data.comment ? data.comment : e.comment
-    });
-  });
 } // update age person
 
 
-function updateAgePersonById(id, inputAge) {
-  _models.default.Person.update( // Values to update
-  {
+function updatePerson(id, inputAge) {
+  _models.default.Person.update({
     age: inputAge
-  }, // Clause
-  {
+  }, {
     where: {
       id: id
     }

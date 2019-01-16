@@ -85,25 +85,6 @@ module.exports = {
       });
     }
   },
-  // getByIdPerson: (req, res) => {
-  //   // get emp với id
-  //   PersonService.getPersonById(parseInt(req.params.id)).then((data) => {
-  //     if (data.length > 0) {
-  //       res.status(CodeAPI[200]).send({
-  //         data: data[0],
-  //         length: data.length
-  //       })
-  //     } else {
-  //       return res.status(CodeAPI[404]).send({
-  //         message: 'Emp not found with id  ' + req.params.id
-  //       })
-  //     }
-  //   }, (error) => {
-  //     return res.status(CodeAPI[500]).send({
-  //       message: ' Server err : ' + error
-  //     })
-  //   })
-  // },
   // add a new employeee
   addNewPerson: function addNewPerson(rep, res) {
     var data = rep.body; // validate input
@@ -129,34 +110,6 @@ module.exports = {
       });
     }
   },
-  // update employee
-  // updatePerson: async (rep, res) => {
-  //   const data = rep.body
-  //   let result = Joi.validate(data, Validate.schema, (err, _value) => {
-  //     if (err) return false
-  //     return true
-  //   })
-  //   if (result) {
-  //     try {
-  //       let emp = await PersonService.getPersonById(parseInt(rep.params.id))
-  //       if (emp.length > 0) {
-  //         await PersonService.updatePersonById(emp, data)
-  //         res.status(CodeAPI[200]).send({
-  //           data: emp
-  //         })
-  //       }
-  //     } catch (error) {
-  //       res.status(CodeAPI[400])({
-  //         data: {},
-  //         message: `Cannot update a new emp failed: ${error}`
-  //       })
-  //     }
-  //   } else {
-  //     return res.status(CodeAPI[400]).send({
-  //       message: 'Input is invalid, please check input : '
-  //     })
-  //   }
-  // },
   // delete employee
   deletePerson: function deletePerson(rep, res) {
     // get id
@@ -196,7 +149,7 @@ module.exports = {
         var age = parseInt(data[0].dataValues.age + 1);
 
         if (age <= 149) {
-          var isResult = PersonService.updateAgePersonById(id, age);
+          var isResult = PersonService.updatePerson(id, age);
 
           if (isResult === 1) {
             res.status(_codes.default[200]).send({
@@ -232,7 +185,7 @@ module.exports = {
         var age = parseInt(data[0].dataValues.age - 1);
 
         if (age >= 15) {
-          var isResult = PersonService.updateAgePersonById(id, age);
+          var isResult = PersonService.updatePerson(id, age);
 
           if (isResult === 1) {
             res.status(_codes.default[200]).send({

@@ -34,27 +34,10 @@ export function addNewPerson (data) {
 export function deletePersonById (id) {
   return db.Person.destroy({ where: { id: id } })
 }
-// update person with id
-export function updatePersonById (person, data) {
-  person.forEach((e) => {
-    e.update({
-      name: data.name ? data.name : e.name,
-      age: data.age ? data.age : e.age,
-      comment: data.comment ? data.comment : e.comment
-    })
-  })
-}
 // update age person
-export function updateAgePersonById (id,inputAge) {
-  db.Person.update(
-    // Values to update
-    { age :  inputAge},
-    // Clause
-    { where: 
-        {
-            id: id
-        }
-    }
+export function updatePerson(id,inputage) {
+  db.Person.update({ age :  inputage},
+    { where: {id: id}}
     ).then(count => {
         return count;
     });

@@ -13,7 +13,8 @@ var env = process.env.NODE_ENV || 'development';
 
 var config = require(__dirname.concat('/../../config/config.js'))[env];
 
-var db = {};
+var db = {}; //mysql://b21a832c6027c9:a3beb530@eu-cdbr-west-02.cleardb.net/heroku_0506b6b683b840a?reconnect=true
+
 var sequelize;
 
 if (config.use_env_variable) {

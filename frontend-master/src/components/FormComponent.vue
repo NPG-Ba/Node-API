@@ -14,29 +14,37 @@
         {{$t('save')}}
       </b-alert>
     <form @submit.prevent="onSubmit" v-if="show" autocomplete="false" name="form" @reset="onReset">
-      <div class="form-group mt-3">
-        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm" >{{$t('form.input.name')}}</label>
-        <b-form-input class="form-control input-small" name="name" v-model="name" v-validate="{required: true, min:3, max:10, regex:/[^\p{L}\s_]+$/i }" autocomplete="false"></b-form-input>
+      <div class="form-group row">
+        <label for="colFormLabelSm" class="col-sm-2 col-form-label">{{$t('form.input.name')}}</label>
+         <div class="col-sm-10">
+        <b-form-input class="form-control col-sm-6" name="name" v-model="name" v-validate="{required: true, min:3, max:10, regex:/[^\p{L}\s_]+$/i }" autocomplete="false"></b-form-input>
         <p v-if='errors.has("name")'>{{$t('form.messages.name_required')}}</p>
+         </div>
       </div>
-      <div class="form-group">
-        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">{{$t('form.input.age')}}</label>
-        <b-form-input class="form-control input-small" data-vv-name="age" type="number" v-model="age" v-validate="{required: true}" min="15" max="150" name="age"></b-form-input>
-        <p v-if='errors.has("age")'>{{$t('form.messages.age_required')}}</p>
+      <div class="form-group row">
+        <label for="colFormLabelSm" class="col-sm-2 col-form-label">{{$t('form.input.age')}}</label>
+         <div class="col-sm-10">
+            <b-form-input class="form-control col-sm-6" data-vv-name="age" type="number" v-model="age" v-validate="{required: true}" min="15" max="150" name="age"></b-form-input>
+            <p v-if='errors.has("age")'>{{$t('form.messages.age_required')}}</p>
+         </div>
       </div>
-      <div class="form-group">
-        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">{{$t('form.input.comment')}}</label>
+
+      <div class="form-group row">
+        <label for="colFormLabelSm" class="col-sm-2 col-form-label">{{$t('form.input.comment')}}</label>
+         <div class="col-sm-10">
         <b-form-textarea id="textarea1" v-model="comment" name="comment" placeholder="Enter something" :rows="3" :max-rows="6" v-validate="{ required: true}"></b-form-textarea>
         <p v-if='errors.has("comment")'>{{$t('form.messages.comment_required')}}</p>
+         </div>
       </div>
-      <div class="justify-content-center">
-        <div class="col mt-2 text-center">
+      <div class="form-group row">
+        <label for="colFormLabelSm" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-5" style="text-align: right">
           <b-button class="btn btn-primary" type="submit" :disabled="errors.any()" v-show="!isLoading">{{$t('form.buttons.add')}}</b-button>
           <button class="btn btn-warning" type="button" v-on:click="addEmp()" disabled v-show="isLoading">
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             Loading...
           </button>
-          <b-button class="btn btn-danger" type="reset" value="Reset">{{$t('form.buttons.cancel')}}</b-button>
+          <b-button style="margin-right: -10px;" class="btn btn-danger" type="reset" value="Reset">{{$t('form.buttons.cancel')}}</b-button>
         </div>
       </div>
     </form>

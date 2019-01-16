@@ -4,19 +4,20 @@
       <template slot="nameage" slot-scope="data">{{data.item.name}} ({{data.item.age}})</template>
       <pre slot="comment" slot-scope="data" v-html="data.value"></pre>
       <template slot="action" slot-scope="props">
-        <b-button v-if="props.value >= 145" :disabled="true" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)">+1</b-button>
-        <b-button v-else :disabled="false" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)" >+1</b-button>
-        <b-button  v-if="props.value <= 14" :disabled="true" class="btn btn-primary btn-sm"  @click="downAge(props)">-122</b-button>
-        <b-button v-else :disabled="false" class="btn btn-primary btn-sm" @click="downAge(props)">-1</b-button>
+       <!-- <b-button v-if="props.value >= 145" :disabled="true" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)">+1</b-button>-->
+        <b-button :disabled="false" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)" >+1</b-button>
+       <!-- <b-button  v-if="props.value <= 14" :disabled="true" class="btn btn-primary btn-sm"  @click="downAge(props)">-122</b-button>-->
+        <b-button :disabled="false" class="btn btn-primary btn-sm" @click="downAge(props)">-1</b-button>
         <b-button b-btn v-b-modal.modalPrevent  size="sm"  v-on:click="info(props.item, props.index)"  class="mr-1">{{$t('table.button.delete')}}</b-button>
       </template>
     </b-table>
     <p v-if="isProcessing">Loading...</p>
-    <div class="row justify-content-md-left">
-      <div class="col-6 col-sm-12 col-md-6" style="text-align: right;">
-        <b-button  :disabled="isDisabled"  class="btn btn-primary btn-sm" v-show="!isMore"  v-on:click="morePerson($event)" >{{$t('button.more')}}</b-button>
+    <div class="form-group row">
+        <label for="colFormLabelSm" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-5" style="text-align: right">
+          <b-button  :disabled="isDisabled" style="margin-right: -10px;" class="btn btn-warning" v-show="!isMore"  v-on:click="morePerson($event)" >{{$t('button.more')}}</b-button>
+        </div>
       </div>
-    </div>
     <!--Modal-->
     <b-modal id="modalPrevent" ref="modal"  v-bind:ok-title="$t('dialog.oke')" v-bind:title="$t('dialog.title')" v-bind:cancel-title="$t('dialog.cancel')"  @ok="handleOk(modalInfo.content,$event,modalInfo.title)"> 
         <table class="table table-hover">
@@ -137,7 +138,7 @@ export default class ListTableComponent extends Vue {
   public upAge(data: any) {
     console.log(data.item.age)
     if (parseInt(data.item.age) < 149) {
-      this.$store.dispatch("upAge", [data.item.id, data.index]);
+      this.$store.dispatch("upAge", [data.item.id, data.index,]);
     }else
     {
       alert("Age requie < 150");
