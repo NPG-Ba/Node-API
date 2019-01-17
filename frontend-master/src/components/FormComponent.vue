@@ -11,7 +11,7 @@
       </b-button>
     </template>
       <b-alert :show="dismissCountDown" dismissible variant="warning" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
-        {{$t('save')}}
+        {{$t('message.save')}}
       </b-alert>
     <form @submit.prevent="onSubmit" v-if="show" autocomplete="false" name="form" @reset="onReset">
       <div class="form-group row">
@@ -70,7 +70,7 @@ export default class FormComponent extends Vue {
   public show = true;
 
   @State(state => state.personForm.isProcessing) public isLoading?: boolean;
-  // pro form
+  /*  Form */
   public age: number | null = null;
   public comment: string = "";
   get name() {
@@ -80,11 +80,11 @@ export default class FormComponent extends Vue {
     this.$store.commit("setName", val);
   }
 
-  // alert
+  /* Alert */
     private dismissSecs = 2
     private  dismissCountDown = 0
 
-  //submit  form
+  /* Submit  form */
   public onSubmit() {
 
     this.$validator.validateAll().then(result => {
@@ -92,7 +92,7 @@ export default class FormComponent extends Vue {
         this.$store.dispatch("save",new Person(this.name,this.age || 15,this.escapeOutput(this.comment)))
           .then(
             (success: FormResponse) => {
-              // reset lại id min
+              // reset id min */
               this.$store.state.listTable.idMin = this.$store.state.listTable.idMin + 1;
               this.name = "";
               this.age = 0;
@@ -108,16 +108,16 @@ export default class FormComponent extends Vue {
     });
     
   }
-  //set lang jp
+  /* Set lang jp */
   public setLangJP() {
     this.$store.dispatch("changeLang", "ja");
   }
-  // set lang us
+  /* Set lang us */
   public setLangUS() {
     this.$store.dispatch("changeLang", "en");
   }
 
-  // Reset form
+  /* Reset form */
   public onReset(evt: any) {
     evt.preventDefault();
     /* Reset our form values */
@@ -131,7 +131,7 @@ export default class FormComponent extends Vue {
     });
   }
 
-  // check XSS
+  /* check XSS */
   public escapeOutput(toOutput: any) {
     return toOutput
       .replace(/\&/g, "&amp;")
@@ -141,7 +141,7 @@ export default class FormComponent extends Vue {
       .replace(/\'/g, "&#x27")
       .replace(/\//g, "&#x2F");
   }
-  // alert
+  /* Alert */
 
   public countDownChanged (dismissCountDown :any) {
       this.dismissCountDown = dismissCountDown

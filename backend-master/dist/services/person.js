@@ -25,7 +25,7 @@ function getCountPerson() {
   var data = _models.default.Person.findAndCountAll();
 
   return data;
-} // get all person 
+} // get all person
 
 
 function getAllPerson(limit, offset) {
@@ -60,7 +60,7 @@ function getPersonById(id) {
 
 function addNewPerson(data) {
   return _models.default.Person.create(data);
-} // delete person with id 
+} // delete person with id
 
 
 function deletePersonById(id) {
@@ -73,13 +73,11 @@ function deletePersonById(id) {
 
 
 function updatePerson(id, inputage) {
-  _models.default.Person.update({
+  return _models.default.Person.update({
     age: inputage
   }, {
     where: {
       id: id
     }
-  }).then(function (count) {
-    return count;
   });
 }

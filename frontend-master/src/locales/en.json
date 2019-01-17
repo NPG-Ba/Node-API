@@ -37,5 +37,9 @@
     "oke"   : "OK",
     "cancel" : "Cancel"
   },
-  "save" : "Save success"
+  "message":{
+    "save" : "Save success",
+    "error" :"Save failed"
+  }
+  
 }

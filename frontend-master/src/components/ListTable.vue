@@ -4,10 +4,8 @@
       <template slot="nameage" slot-scope="data">{{data.item.name}} ({{data.item.age}})</template>
       <pre slot="comment" slot-scope="data" v-html="data.value"></pre>
       <template slot="action" slot-scope="props">
-       <!-- <b-button v-if="props.value >= 145" :disabled="true" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)">+1</b-button>-->
-        <b-button :disabled="false" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)" >+1</b-button>
-       <!-- <b-button  v-if="props.value <= 14" :disabled="true" class="btn btn-primary btn-sm"  @click="downAge(props)">-122</b-button>-->
-        <b-button :disabled="false" class="btn btn-primary btn-sm" @click="downAge(props)">-1</b-button>
+        <b-button :disabled="(props.item.age >= 150) ? true : false" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)" >+1</b-button>
+        <b-button :disabled="(props.item.age <= 15) ? true : false" class="btn btn-primary btn-sm" @click="downAge(props)">-1</b-button>
         <b-button b-btn v-b-modal.modalPrevent  size="sm"  v-on:click="info(props.item, props.index)"  class="mr-1">{{$t('table.button.delete')}}</b-button>
       </template>
     </b-table>
@@ -53,10 +51,10 @@ import i18n from "@/i18n";
 export default class ListTableComponent extends Vue {
 
   @State(state => state.listTable.isMore) public isMore?: boolean;
-  // Init đối tượng service
+  /* Init đối tượng service */
   public personService = new PersonService();
 
-  // modal begin
+  /* modal begin */
   public modalInfo = { title: "", content: "" };
 
   public resetModal() {
@@ -66,78 +64,79 @@ export default class ListTableComponent extends Vue {
   public info(item: any, index: any) {
     this.modalInfo.title = `${index}`;
     this.modalInfo.content = item;
-    // hiện modal
+    /* Show modal */
     this.$root.$emit("bv::show::modal", "modalInfo");
   }
 
   public handleOk(data: any, evt: any, index: any) {
-    // delete
+    /* Delete */
     this.$store.dispatch("deletePerson", [data.id, parseInt(index)]);
-    // ẩn modal
+    /* Hide modal */
     this.$root.$emit("bv::hide::modal", "modalInfo");
   }
-  // End modal
+  /* End modal */
 
-  // get item cho table
+  /* get item cho table */
   get items() {
-    // Lấy page hiện tai
+    /* Lấy page hiện tai */
     this.currentPage = this.$store.state.listTable.currentPage;
 
-    // Lấy id nhỏ nhất trong table
+    /* Lấy id nhỏ nhất trong table */
     this.idMin = this.$store.state.listTable.idMin;
-
-    // Lấy max page
+ 
+    /* Lấy max page */
     this.maxPage = this.$store.state.listTable.totalPage;
 
-    // Lấy data cho table
+    /* Lấy data cho table */
     return this.$store.state.listTable.items;
   }
-  // setting trạng thái cho state
+  /* setting trạng thái cho state */
   get isProcessing() {
     return this.$store.state.listTable.isProcessing;
   }
 
-  // Trạng thái state
+  /* Trạng thái state */
   public saveStatue: boolean | null = null;
 
   public saveMessage: string = "";
 
-  // Setting header table
+  /* Setting header table */
   public fields1 = [
     { key: "nameage", label: '' },
     { key: "comment", label: '' },
     { key: "action", label: '', class: "colum-age" }
   ];
-  // Setting table lúc hover vào rows
+  /* Setting table lúc hover vào rows */
   private hover = true;
 
-  // Auto fix  reponsive
+  /* Auto fix  reponsive table */
   private fixed = true;
 
-  // Trang hiên tai
+  /* Trang hiên tai */
   private currentPage = 0;
 
-  // Id Min nhỏ nhất
+  /* Id Min nhỏ nhất */
   private idMin = 1;
 
-  // số lượng page tối đa
+  /* số lượng page tối đa */
   private maxPage = 0;
 
-  // Chỉ số của row chọn
+  /* Chỉ số của row chọn */
   private index = 0;
 
-  // Trạng thái của button
+  /* Trạng thái của button */
   private isDisabled = false;
 
-  // Init table => dổ dữ liệu vào table
+  /* Init table => dổ dữ liệu vào table */
   public mounted() {
     this.$store.dispatch("init");
   }
 
-  // Method update age+ with id
+  /* Method update age+ with id */
   public upAge(data: any) {
     console.log(data.item.age)
-    if (parseInt(data.item.age) < 149) {
+    
+    if (parseInt(data.item.age) < 150) {
       this.$store.dispatch("upAge", [data.item.id, data.index,]);
     }else
     {
@@ -145,7 +144,7 @@ export default class ListTableComponent extends Vue {
     }
   }
 
-  // Method update age- with id
+  /* Method update age- with id */
   public downAge(data: any) {
     if (parseInt(data.item.age) > 15) {
       this.$store.dispatch("downAge", [data.item.id, data.index]);
@@ -156,7 +155,7 @@ export default class ListTableComponent extends Vue {
     }
   }
 
-  // get more data with id ang page
+  /* get more data with id ang page */
   public morePerson(event: any) {
     event.preventDefault();
     this.$store.dispatch("morePerson", this.idMin);
@@ -194,7 +193,7 @@ table {
   white-space: -pre-wrap;      /* Opera 4-6 */
   white-space: -o-pre-wrap;    /* Opera 7 */
   word-wrap: break-word;       /* Internet Explorer 5.5+ */
-  font-family: 'Avenir', Helvetica, Arial, sans-serif !important;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif ,'ＭＳ Ｐ明朝'!important;
   -webkit-font-smoothing: antialiased;
   font-size: 1rem;
   font-weight: 400;

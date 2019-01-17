@@ -16,7 +16,7 @@ export function init(store: ActionContext<ListTableState, any>,
                 store.commit('setMore', true);
             }
         }).catch(e => {
-            // Nếu sinh lỗi 
+            // Redirect Url Error 
             index.replace('/server-error')
         }).finally(() => {
             store.commit('setProcessing', false);
@@ -37,7 +37,7 @@ export function morePerson(store: ActionContext<ListTableState, any>,
                 store.commit('setMore', true);
             }
         }).catch(e => {
-            // Nếu sinh lỗi 
+            // Redirect Url Error 
             index.push('/server-error')
         }).finally(() => {
             store.commit('setProcessing', false);

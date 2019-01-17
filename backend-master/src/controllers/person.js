@@ -46,34 +46,34 @@ module.exports = {
     // page number current
     let id = parseInt(req.params.id)
     let page = parseInt(req.params.page)
-      // Gọi service
-      if ( (id === 0) || (page === 0) ){
-        PersonService.getAllPerson(limit, offset).then((dataPerson) => {
-          res.status(CodeAPI[200]).send({
-            data: dataPerson,
-            length: dataPerson.length,
-            pages: page
-          })
-        }, () => {
-          res.status(CodeAPI[204]).send({
-            message: 'No data',
-            data: {}
-          })
+    // Gọi service
+    if ((id === 0) || (page === 0)) {
+      PersonService.getAllPerson(limit, offset).then((dataPerson) => {
+        res.status(CodeAPI[200]).send({
+          data: dataPerson,
+          length: dataPerson.length,
+          pages: page
         })
-      } else {
-        PersonService.getAllPersonWhereById(limit, offset, id).then((dataPerson) => {
-          res.status(CodeAPI[200]).send({
-            data: dataPerson,
-            length: dataPerson.length,
-            pages: page
-          })
-        }, () => {
-          res.status(CodeAPI[204]).send({
-            message: 'No data',
-            data: {}
-          })
+      }, () => {
+        res.status(CodeAPI[204]).send({
+          message: 'No data',
+          data: {}
         })
-      }
+      })
+    } else {
+      PersonService.getAllPersonWhereById(limit, offset, id).then((dataPerson) => {
+        res.status(CodeAPI[200]).send({
+          data: dataPerson,
+          length: dataPerson.length,
+          pages: page
+        })
+      }, () => {
+        res.status(CodeAPI[204]).send({
+          message: 'No data',
+          data: {}
+        })
+      })
+    }
   },
 
   // add a new employeee
@@ -90,14 +90,12 @@ module.exports = {
         res.status(CodeAPI[200]).send({
           data: data.dataValues
         })
-      }, (error) => {
-        return res.status(CodeAPI[500]).send({
-          message: 'Error retrieving Person with id ' + error
+      }, () => {
+        res.status(CodeAPI[500]).send({
         })
       })
     } else {
       return res.status(CodeAPI[400]).send({
-        message: 'The url in the request is invalid : ' + rep.body.id
       })
     }
   },
@@ -105,64 +103,49 @@ module.exports = {
   // delete employee
   deletePerson: (rep, res) => {
     // get id
-    let id  = parseInt(rep.params.id)
+    let id = parseInt(rep.params.id)
     PersonService.getPersonById(id).then((data) => {
       if (data.length > 0) {
         PersonService.deletePersonById(id).then(() => {
           res.status(CodeAPI[200]).send({
-            result: true
           })
         }, () => {
-          res.status(CodeAPI[200]).send({
-            result: false
+          res.status(CodeAPI[400]).send({
           })
         })
       } else {
         res.status(CodeAPI[404]).send({
-          message: 'Emp not found with id ' + id
         })
       }
-    }, (error) => {
-      return res.status(CodeAPI[500]).send({
-        message: ' Server err : ' + error
+    }, () => {
+      res.status(CodeAPI[500]).send({
       })
     })
   },
 
   // update age person id
-  updateAgePerson: (rep, res) => {
+  upAgePerson: (rep, res) => {
     let id = parseInt(rep.params.id)
     PersonService.getPersonById(id).then((data) => {
       // No data
-      if(data.length === 0)
-      {
+      if (data.length === 0) {
         res.status(CodeAPI[500]).send({
-          message: 'Not update'
         })
-      }
-      else{
-        let age = parseInt(data[0].dataValues.age + 1);
-        if (age <= 149) {
-         var isResult =  PersonService.updatePerson(id,age)
-          if(isResult===1){
+      } else {
+        let age = parseInt(data[0].dataValues.age + 1)
+        console.log('isResult')
+        if (age <= 150) {
+          PersonService.updatePerson(id, age).then(() => {
             res.status(CodeAPI[200]).send({
-              result: true
             })
-          } else 
-          {
-            res.status(CodeAPI[204]).send({
-              result: false
-            })
-          }
+          })
         } else {
-          return res.status(CodeAPI[400]).send({
-            message: 'Check input age'
+          res.status(CodeAPI[400]).send({
           })
         }
       }
-    }, (error) => {
+    }, () => {
       res.status(CodeAPI[500]).send({
-        message: error.message
       })
     })
   },
@@ -172,35 +155,27 @@ module.exports = {
     let id = parseInt(rep.params.id)
     PersonService.getPersonById(id).then((data) => {
       // No data
-      if(data.length === 0)
-      {
+      if (data.length === 0) {
         res.status(CodeAPI[500]).send({
-          message: 'Not update'
         })
-      }
-      else{
-        let age = parseInt(data[0].dataValues.age - 1);
+      } else {
+        let age = parseInt(data[0].dataValues.age - 1)
         if (age >= 15) {
-         var isResult =  PersonService.updatePerson(id,age)
-          if(isResult===1){
+          var isResult = PersonService.updatePerson(id, age)
+          if (isResult === 1) {
             res.status(CodeAPI[200]).send({
-              result: true
             })
-          } else 
-          {
+          } else {
             res.status(CodeAPI[204]).send({
-              result: false
             })
           }
         } else {
-          return res.status(CodeAPI[404]).send({
-            message: 'Check input age'
+          res.status(CodeAPI[404]).send({
           })
         }
       }
-    }, (error) => {
+    }, () => {
       res.status(CodeAPI[500]).send({
-        message: error.message
       })
     })
   }

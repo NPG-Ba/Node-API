@@ -99,15 +99,11 @@ module.exports = {
         res.status(_codes.default[200]).send({
           data: data.dataValues
         });
-      }, function (error) {
-        return res.status(_codes.default[500]).send({
-          message: 'Error retrieving Person with id ' + error
-        });
+      }, function () {
+        res.status(_codes.default[500]).send({});
       });
     } else {
-      return res.status(_codes.default[400]).send({
-        message: 'The url in the request is invalid : ' + rep.body.id
-      });
+      return res.status(_codes.default[400]).send({});
     }
   },
   // delete employee
@@ -117,59 +113,38 @@ module.exports = {
     PersonService.getPersonById(id).then(function (data) {
       if (data.length > 0) {
         PersonService.deletePersonById(id).then(function () {
-          res.status(_codes.default[200]).send({
-            result: true
-          });
+          res.status(_codes.default[200]).send({});
         }, function () {
-          res.status(_codes.default[200]).send({
-            result: false
-          });
+          res.status(_codes.default[400]).send({});
         });
       } else {
-        res.status(_codes.default[404]).send({
-          message: 'Emp not found with id ' + id
-        });
+        res.status(_codes.default[404]).send({});
       }
-    }, function (error) {
-      return res.status(_codes.default[500]).send({
-        message: ' Server err : ' + error
-      });
+    }, function () {
+      res.status(_codes.default[500]).send({});
     });
   },
   // update age person id
-  updateAgePerson: function updateAgePerson(rep, res) {
+  upAgePerson: function upAgePerson(rep, res) {
     var id = parseInt(rep.params.id);
     PersonService.getPersonById(id).then(function (data) {
       // No data
       if (data.length === 0) {
-        res.status(_codes.default[500]).send({
-          message: 'Not update'
-        });
+        res.status(_codes.default[500]).send({});
       } else {
         var age = parseInt(data[0].dataValues.age + 1);
+        console.log('isResult');
 
-        if (age <= 149) {
-          var isResult = PersonService.updatePerson(id, age);
-
-          if (isResult === 1) {
-            res.status(_codes.default[200]).send({
-              result: true
-            });
-          } else {
-            res.status(_codes.default[204]).send({
-              result: false
-            });
-          }
-        } else {
-          return res.status(_codes.default[400]).send({
-            message: 'Check input age'
+        if (age <= 150) {
+          PersonService.updatePerson(id, age).then(function () {
+            res.status(_codes.default[200]).send({});
           });
+        } else {
+          res.status(_codes.default[400]).send({});
         }
       }
-    }, function (error) {
-      res.status(_codes.default[500]).send({
-        message: error.message
-      });
+    }, function () {
+      res.status(_codes.default[500]).send({});
     });
   },
   // down age person id
@@ -178,9 +153,7 @@ module.exports = {
     PersonService.getPersonById(id).then(function (data) {
       // No data
       if (data.length === 0) {
-        res.status(_codes.default[500]).send({
-          message: 'Not update'
-        });
+        res.status(_codes.default[500]).send({});
       } else {
         var age = parseInt(data[0].dataValues.age - 1);
 
@@ -188,24 +161,16 @@ module.exports = {
           var isResult = PersonService.updatePerson(id, age);
 
           if (isResult === 1) {
-            res.status(_codes.default[200]).send({
-              result: true
-            });
+            res.status(_codes.default[200]).send({});
           } else {
-            res.status(_codes.default[204]).send({
-              result: false
-            });
+            res.status(_codes.default[204]).send({});
           }
         } else {
-          return res.status(_codes.default[404]).send({
-            message: 'Check input age'
-          });
+          res.status(_codes.default[404]).send({});
         }
       }
-    }, function (error) {
-      res.status(_codes.default[500]).send({
-        message: error.message
-      });
+    }, function () {
+      res.status(_codes.default[500]).send({});
     });
   }
 };
