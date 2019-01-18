@@ -12,7 +12,7 @@ export function save(store: ActionContext<PersonFormState, any>,
     return new PersonService().save(formData)
     .then((resp) => {
         // Thêm mới thành công thì sẽ làm TODO
-        store.commit('init', resp.data.data);
+        store.commit('add', resp.data.data);
     }).catch(e => {
         // Nếu sinh lỗi 
         index.push('/server-error')
@@ -37,9 +37,7 @@ export function downAge(store: ActionContext<PersonFormState, any>, params?: any
     // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
     return new PersonService().down(params).then((resp) => {
         // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
-        console.log(params[1])
         store.commit('setTableDownAge', params[1]);
-        console.log(params[1])
     }).catch(e => {
         // Nếu sinh lỗi 
         index.push('/server-not-found')

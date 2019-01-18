@@ -10,6 +10,8 @@ var _application = _interopRequireDefault(require("../config/application"));
 
 var _codes = _interopRequireDefault(require("../models/response/codes"));
 
+var _this = void 0;
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -96,14 +98,15 @@ module.exports = {
 
     if (result) {
       PersonService.addNewPerson(data).then(function (data) {
-        res.status(_codes.default[200]).send({
-          data: data.dataValues
-        });
+        _this.getAllPerson(); // res.status(CodeAPI[200]).send({
+        //   data: data.dataValues
+        // })
+
       }, function () {
-        res.status(_codes.default[500]).send({});
+        res.status(_codes.default[501]).send();
       });
     } else {
-      return res.status(_codes.default[400]).send({});
+      return res.status(_codes.default[400]).send();
     }
   },
   // delete employee
@@ -113,15 +116,15 @@ module.exports = {
     PersonService.getPersonById(id).then(function (data) {
       if (data.length > 0) {
         PersonService.deletePersonById(id).then(function () {
-          res.status(_codes.default[200]).send({});
+          res.status(_codes.default[200]).send();
         }, function () {
-          res.status(_codes.default[400]).send({});
+          res.status(_codes.default[501]).send();
         });
       } else {
-        res.status(_codes.default[404]).send({});
+        res.status(_codes.default[404]).send();
       }
     }, function () {
-      res.status(_codes.default[500]).send({});
+      res.status(_codes.default[500]).send();
     });
   },
   // update age person id
@@ -130,21 +133,22 @@ module.exports = {
     PersonService.getPersonById(id).then(function (data) {
       // No data
       if (data.length === 0) {
-        res.status(_codes.default[500]).send({});
+        res.status(_codes.default[500]).send();
       } else {
         var age = parseInt(data[0].dataValues.age + 1);
-        console.log('isResult');
 
-        if (age <= 150) {
+        if (age < 150) {
           PersonService.updatePerson(id, age).then(function () {
-            res.status(_codes.default[200]).send({});
+            res.status(_codes.default[200]).send();
+          }, function () {
+            res.status(_codes.default[501]).send();
           });
         } else {
-          res.status(_codes.default[400]).send({});
+          res.status(_codes.default[400]).send();
         }
       }
     }, function () {
-      res.status(_codes.default[500]).send({});
+      res.status(_codes.default[500]).send();
     });
   },
   // down age person id
@@ -153,24 +157,22 @@ module.exports = {
     PersonService.getPersonById(id).then(function (data) {
       // No data
       if (data.length === 0) {
-        res.status(_codes.default[500]).send({});
+        res.status(_codes.default[500]).send();
       } else {
         var age = parseInt(data[0].dataValues.age - 1);
 
-        if (age >= 15) {
-          var isResult = PersonService.updatePerson(id, age);
-
-          if (isResult === 1) {
-            res.status(_codes.default[200]).send({});
-          } else {
-            res.status(_codes.default[204]).send({});
-          }
+        if (age > 15) {
+          PersonService.updatePerson(id, age).then(function () {
+            res.status(_codes.default[200]).send();
+          }, function () {
+            res.status(_codes.default[501]).send();
+          });
         } else {
-          res.status(_codes.default[404]).send({});
+          res.status(_codes.default[400]).send();
         }
       }
     }, function () {
-      res.status(_codes.default[500]).send({});
+      res.status(_codes.default[500]).send();
     });
   }
 };

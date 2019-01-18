@@ -13,7 +13,7 @@
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.11",
     "register-service-worker": "^1.5.2",
-    "vee-validate": "^2.1.4",
+    " -validate": "^2.1.4",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
     "vue-flag-icon": "^1.0.6",

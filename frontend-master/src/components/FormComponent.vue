@@ -28,7 +28,6 @@
             <p v-if='errors.has("age")'>{{$t('form.messages.age_required')}}</p>
          </div>
       </div>
-
       <div class="form-group row">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label">{{$t('form.input.comment')}}</label>
          <div class="col-sm-10">
@@ -36,6 +35,9 @@
         <p v-if='errors.has("comment")'>{{$t('form.messages.comment_required')}}</p>
          </div>
       </div>
+      {{errors.has("name")}}
+      {{errors.has("age")}}
+      {{errors.has("comment")}}
       <div class="form-group row">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-5" style="text-align: right">

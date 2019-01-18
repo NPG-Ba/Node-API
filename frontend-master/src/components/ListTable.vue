@@ -17,18 +17,16 @@
         </div>
       </div>
     <!--Modal-->
-    <b-modal id="modalPrevent" ref="modal"  v-bind:ok-title="$t('dialog.oke')" v-bind:title="$t('dialog.title')" v-bind:cancel-title="$t('dialog.cancel')"  @ok="handleOk(modalInfo.content,$event,modalInfo.title)"> 
+    <b-modal id="modalPrevent" centered ref="modal"  v-bind:ok-title="$t('dialog.oke')" v-bind:title="$t('dialog.title')" v-bind:cancel-title="$t('dialog.cancel')"  @ok="handleOk(modalInfo.content,$event,modalInfo.title)"> 
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">#</th>
               <th scope="col">{{$t('form.input.name')}}</th>
               <th scope="col">{{$t('form.input.age')}}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th scope="row">1</th>
               <td>{{ modalInfo.content.name }}</td>
               <td>{{ modalInfo.content.age }}</td>
             </tr>

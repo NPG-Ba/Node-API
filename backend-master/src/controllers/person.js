@@ -91,12 +91,10 @@ module.exports = {
           data: data.dataValues
         })
       }, () => {
-        res.status(CodeAPI[500]).send({
-        })
+        res.status(CodeAPI[501]).send()
       })
     } else {
-      return res.status(CodeAPI[400]).send({
-      })
+      return res.status(CodeAPI[400]).send()
     }
   },
 
@@ -107,19 +105,15 @@ module.exports = {
     PersonService.getPersonById(id).then((data) => {
       if (data.length > 0) {
         PersonService.deletePersonById(id).then(() => {
-          res.status(CodeAPI[200]).send({
-          })
+          res.status(CodeAPI[200]).send()
         }, () => {
-          res.status(CodeAPI[400]).send({
-          })
+          res.status(CodeAPI[501]).send()
         })
       } else {
-        res.status(CodeAPI[404]).send({
-        })
+        res.status(CodeAPI[404]).send()
       }
     }, () => {
-      res.status(CodeAPI[500]).send({
-      })
+      res.status(CodeAPI[500]).send()
     })
   },
 
@@ -129,24 +123,21 @@ module.exports = {
     PersonService.getPersonById(id).then((data) => {
       // No data
       if (data.length === 0) {
-        res.status(CodeAPI[500]).send({
-        })
+        res.status(CodeAPI[500]).send()
       } else {
         let age = parseInt(data[0].dataValues.age + 1)
-        console.log('isResult')
-        if (age <= 150) {
+        if (age < 150) {
           PersonService.updatePerson(id, age).then(() => {
-            res.status(CodeAPI[200]).send({
-            })
+            res.status(CodeAPI[200]).send()
+          }, () => {
+            res.status(CodeAPI[501]).send()
           })
         } else {
-          res.status(CodeAPI[400]).send({
-          })
+          res.status(CodeAPI[400]).send()
         }
       }
     }, () => {
-      res.status(CodeAPI[500]).send({
-      })
+      res.status(CodeAPI[500]).send()
     })
   },
 
@@ -156,27 +147,21 @@ module.exports = {
     PersonService.getPersonById(id).then((data) => {
       // No data
       if (data.length === 0) {
-        res.status(CodeAPI[500]).send({
-        })
+        res.status(CodeAPI[500]).send()
       } else {
         let age = parseInt(data[0].dataValues.age - 1)
-        if (age >= 15) {
-          var isResult = PersonService.updatePerson(id, age)
-          if (isResult === 1) {
-            res.status(CodeAPI[200]).send({
-            })
-          } else {
-            res.status(CodeAPI[204]).send({
-            })
-          }
-        } else {
-          res.status(CodeAPI[404]).send({
+        if (age > 15) {
+          PersonService.updatePerson(id, age).then(() => {
+            res.status(CodeAPI[200]).send()
+          }, () => {
+            res.status(CodeAPI[501]).send()
           })
+        } else {
+          res.status(CodeAPI[400]).send()
         }
       }
     }, () => {
-      res.status(CodeAPI[500]).send({
-      })
+      res.status(CodeAPI[500]).send()
     })
   }
 }

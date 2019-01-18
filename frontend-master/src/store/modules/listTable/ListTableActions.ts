@@ -7,13 +7,13 @@ export function init(store: ActionContext<ListTableState, any>,
     params?: any) {
     return new PersonService().init(params)
         .then((resp) => {
-            store.commit('append', resp.data.data);
-            store.commit('setTotalPage', resp.data.pages);
-            store.commit('setCurrentPage', 1);
-            store.commit('setIdMin', resp.data.data[resp.data.data.length - 1].id);
-            if(parseInt(resp.data.pages)=== 1)
-            {
+            if((parseInt(resp.data.pages) <=1)){
                 store.commit('setMore', true);
+            }else{
+                store.commit('append', resp.data.data);
+                store.commit('setTotalPage', resp.data.pages);
+                store.commit('setCurrentPage', 1);
+                store.commit('setIdMin', resp.data.data[resp.data.data.length - 1].id);
             }
         }).catch(e => {
             // Redirect Url Error 
