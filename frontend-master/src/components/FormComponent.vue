@@ -15,7 +15,7 @@
       <div class="form-group row">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label">{{$t('form.input.age')}}</label>
          <div class="col-sm-10">
-            <b-form-input class="form-control col-sm-6" data-vv-name="age" type="text" v-model="age" v-validate="'between:15,150'" name="age"></b-form-input>
+            <b-form-input class="form-control col-sm-6" data-vv-name="age" type="number" v-model="age" v-validate="'between:15,150'" name="age"></b-form-input>
             <p  v-if='errors.has("age")' class="help is-danger">{{$t('form.messages.age_required')}}</p>
          </div>
       </div>
@@ -39,7 +39,7 @@
         </div>
       </div>
     </form>
-      <b-modal id="modalsm" size="sm" title="Bạn có muốn save!">
+      <b-modal id="modalsm" size="sm" title="Bạn có muốn save!" @ok="handleOk()">
       </b-modal>
     <hr>
   </div>
@@ -67,7 +67,7 @@ export default class FormComponent extends Vue {
   @State(state => state.personForm.isProcessing) public isLoading?: boolean;
   /*  Form */
   private isAdd = true;
-  public age: number | null = null;
+  public age: number  = 0;
   public comment: string = "";
   get name() {
     return this.$store.state.personForm.form.name;
@@ -82,11 +82,14 @@ export default class FormComponent extends Vue {
 
  public someHandler(){
    this.$validator.validateAll().then(result => {
-      if ((result) && (isNumber(this.age))) {
+      if ((result) && ((this.age >=15) && (this.age <=150))){
         this.isAdd = false;
       }
     });
     
+ }
+ public handleOk(){
+   this.onSubmit()
  }
   /* Submit  form */
   public onSubmit() {
