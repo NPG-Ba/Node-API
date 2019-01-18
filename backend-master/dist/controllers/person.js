@@ -57,12 +57,11 @@ module.exports = {
     var id = parseInt(req.params.id);
     var page = parseInt(req.params.page); // Gọi service
 
-    if (id === 0 || page === 0) {
+    if (id === 0) {
       PersonService.getAllPerson(limit, offset).then(function (dataPerson) {
         res.status(_codes.default[200]).send({
           data: dataPerson,
-          length: dataPerson.length,
-          pages: page
+          length: dataPerson.length
         });
       }, function () {
         res.status(_codes.default[204]).send({
@@ -74,8 +73,7 @@ module.exports = {
       PersonService.getAllPersonWhereById(limit, offset, id).then(function (dataPerson) {
         res.status(_codes.default[200]).send({
           data: dataPerson,
-          length: dataPerson.length,
-          pages: page
+          length: dataPerson.length
         });
       }, function () {
         res.status(_codes.default[204]).send({

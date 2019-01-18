@@ -1,12 +1,12 @@
 <template>
   <div class="container" style="margin-top:20px;">
-    <b-table responsive :fixed="fixed"  hover :items="items" :fields="fields1">
+    <b-table responsive :fixed="fixed"  :hover="hover" :items="items" :fields="fields1">
       <template slot="nameage" slot-scope="data">{{data.item.name}} ({{data.item.age}})</template>
       <pre slot="comment" slot-scope="data" v-html="data.value"></pre>
       <template slot="action" slot-scope="props">
         <b-button :disabled="(props.item.age >= 150) ? true : false" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)" >+1</b-button>
         <b-button :disabled="(props.item.age <= 15) ? true : false" class="btn btn-primary btn-sm" @click="downAge(props)">-1</b-button>
-        <b-button b-btn v-b-modal.modalPrevent  size="sm"  v-on:click="info(props.item, props.index)"  class="mr-1">{{$t('table.button.delete')}}</b-button>
+        <b-button b-btn v-b-modal.modalPrevent  size="sm"  v-on:click="info(props.item, props.index)"  class="mr-1 btn btn-danger">{{$t('table.button.delete')}}</b-button>
       </template>
     </b-table>
     <p v-if="isProcessing">Loading...</p>
@@ -35,7 +35,6 @@
     </b-modal>
   </div>
 </template>
-
 <script lang='ts'>
 import { PersonService } from "@/services/PersonService";
 import { State, Getter, Action, Mutation } from "vuex-class";
@@ -179,11 +178,27 @@ table {
     width: 15%;
   }
 }
-.table thead th {
+.table-responsive thead th {
     vertical-align: bottom;
 }
-.table th, .table td {
-    border-top: 0px solid #dee2e6 !important; 
+.table-responsive thead tr th{
+border-top: 0px solid #dee2e6 !important; 
+}
+.table-responsive thead th{
+  border-bottom: 0px !important;
+}
+.table-responsive tbody tr:first-child td{
+  border-top:none !important;
+}
+.table-responsive thead{
+  display: none;
+}
+.table-responsive:hover{
+  overflow-y: scroll;
+}
+.table-responsive{
+  height: 400px;
+  margin-bottom: 50px;
 }
   pre {
   white-space: pre-wrap;       /* css-3 */

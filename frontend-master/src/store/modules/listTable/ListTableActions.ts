@@ -7,6 +7,7 @@ export function init(store: ActionContext<ListTableState, any>,
     params?: any) {
     return new PersonService().init(params)
         .then((resp) => {
+            console.log(resp.status)
             if((parseInt(resp.data.pages) <=1)){
                 store.commit('setMore', true);
             }else{
@@ -22,11 +23,9 @@ export function init(store: ActionContext<ListTableState, any>,
             store.commit('setProcessing', false);
         })
 }
-
-
 export function morePerson(store: ActionContext<ListTableState, any>,
     params?: any) {
-    return new PersonService().more((store.state.currentPage + 1),params)
+    return new PersonService().more(params)
         .then((resp) => {
             store.commit('prepend', resp.data.data);
             store.commit('setCurrentPage', store.state.currentPage + 1);
@@ -43,7 +42,6 @@ export function morePerson(store: ActionContext<ListTableState, any>,
             store.commit('setProcessing', false);
         })
 }
-
 export default {
     init,
     morePerson,

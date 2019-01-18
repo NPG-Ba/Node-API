@@ -47,12 +47,11 @@ module.exports = {
     let id = parseInt(req.params.id)
     let page = parseInt(req.params.page)
     // Gọi service
-    if ((id === 0) || (page === 0)) {
+    if ((id === 0)) {
       PersonService.getAllPerson(limit, offset).then((dataPerson) => {
         res.status(CodeAPI[200]).send({
           data: dataPerson,
-          length: dataPerson.length,
-          pages: page
+          length: dataPerson.length
         })
       }, () => {
         res.status(CodeAPI[204]).send({
@@ -64,8 +63,7 @@ module.exports = {
       PersonService.getAllPersonWhereById(limit, offset, id).then((dataPerson) => {
         res.status(CodeAPI[200]).send({
           data: dataPerson,
-          length: dataPerson.length,
-          pages: page
+          length: dataPerson.length
         })
       }, () => {
         res.status(CodeAPI[204]).send({

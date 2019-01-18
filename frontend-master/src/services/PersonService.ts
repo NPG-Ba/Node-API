@@ -10,9 +10,9 @@ export class PersonService {
             params,
         });
     }
-    public more(pageCurrent: any,params: any): Promise<any> {
+    public more(params: any): Promise<any> {
         
-        return ApiService.get(`/person/` + pageCurrent + '/' + params, {
+        return ApiService.get(`/person/`+ params, {
             params,
         });
     }

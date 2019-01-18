@@ -14,7 +14,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  padding-top: 30px;
   padding-bottom: 30px;
 }
 #nav {
@@ -27,5 +26,14 @@
       color: #42b983;
     }
   }
+}
+.modal-footer {
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    display: flex;
+    justify-content: flex-start !important;
+}
+.modal-footer .btn-secondary{
+margin-left: 10px;
 }
 </style>
