@@ -3,8 +3,8 @@
 module.exports = {
   'development': {
     'username': 'root',
-    'password': 'root@1234',
-    'database': 'database_development',
+    'password': '123456',
+    'database': 'database_development1',
     'host': '127.0.0.1',
     'dialect': 'mysql',
     'operatorsAliases': false

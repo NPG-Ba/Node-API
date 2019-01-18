@@ -5,40 +5,40 @@
   "form": {
     "title": "個人用フォーム",
     "buttons": {
-      "add": "新しく",
+      "add": "登録",
       "cancel": "キャンセル"
     },
     "input": {
-      "name": "お名前",
+      "name": "名前",
       "age": "年齢",
       "comment": "コメント"
     },
     "messages": {
-      "name_required": "名前フィールドは必須です。",
-      "age_required": "年齢欄は必須です。",
-      "comment_required": "コメント欄は必須です。"
+      "name_required": "名前を記入してください。",
+      "age_required": "年齢を記入してください。",
+      "comment_required": "コメントを記入してください。"
     }
   },
   "table": {
     "button": {
-      "delete": "削除する"
+      "delete": "削除"
     }
   },
   "button": {
-    "more": "もっと"
+    "more": "さらに表示"
   },
   "header": {
-    "name_age": "お名前と年齢",
+    "name_age": "名前(年齢)",
     "comment": "コメント",
     "action": "アクション"
   },
   "dialog" : {
-    "title" : "削除しますか",
-    "oke"   : "同意する",
+    "title" : "削除しますか？",
+    "oke"   : "同意",
     "cancel" : "キャンセル"
   },
   "message":{
-    "save" : "保存しました",
-    "error" :"保存に失敗しました"
+    "save" : "保存しました。",
+    "error" :"保存に失敗しました。"
   }
 }

@@ -10,8 +10,6 @@ var _application = _interopRequireDefault(require("../config/application"));
 
 var _codes = _interopRequireDefault(require("../models/response/codes"));
 
-var _this = void 0;
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -98,10 +96,9 @@ module.exports = {
 
     if (result) {
       PersonService.addNewPerson(data).then(function (data) {
-        _this.getAllPerson(); // res.status(CodeAPI[200]).send({
-        //   data: data.dataValues
-        // })
-
+        res.status(_codes.default[200]).send({
+          data: data.dataValues
+        });
       }, function () {
         res.status(_codes.default[501]).send();
       });

@@ -1,6 +1,6 @@
 <template>
   <div class="container" style="margin-top:20px;">
-    <b-table responsive :fixed="fixed" :hover="hover" :items="items" :fields="fields1">
+    <b-table responsive :fixed="fixed"  hover :items="items" :fields="fields1">
       <template slot="nameage" slot-scope="data">{{data.item.name}} ({{data.item.age}})</template>
       <pre slot="comment" slot-scope="data" v-html="data.value"></pre>
       <template slot="action" slot-scope="props">

@@ -1,15 +1,6 @@
 <template>
   <div>
-    <h1 class="text-center mt-3">{{$t('form.title')}}</h1>
-    <h5>{{$t('common.select_lang')}}</h5>
-    <template>
-      <b-button id="lang" v-on:click="setLangUS()">
-        <flag iso="us"/>
-      </b-button>
-      <b-button id="lang" v-on:click="setLangJP()">
-        <flag iso="jp"/>
-      </b-button>
-    </template>
+    <h1  style="text-align: left;margin-bottom: 30px;margin-top: 15px;">{{$t('form.title')}}</h1>
       <b-alert :show="dismissCountDown" dismissible variant="warning" @dismissed="dismissCountDown=0" @dismiss-count-down="countDownChanged">
         {{$t('message.save')}}
       </b-alert>
@@ -31,13 +22,10 @@
       <div class="form-group row">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label">{{$t('form.input.comment')}}</label>
          <div class="col-sm-10">
-        <b-form-textarea id="textarea1" v-model="comment" name="comment" placeholder="Enter something" :rows="3" :max-rows="6" v-validate="{ required: true}"></b-form-textarea>
+        <b-form-textarea id="textarea1" v-model="comment" name="comment"  :rows="3" :max-rows="6"></b-form-textarea>
         <p v-if='errors.has("comment")'>{{$t('form.messages.comment_required')}}</p>
          </div>
       </div>
-      {{errors.has("name")}}
-      {{errors.has("age")}}
-      {{errors.has("comment")}}
       <div class="form-group row">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-5" style="text-align: right">
@@ -110,15 +98,6 @@ export default class FormComponent extends Vue {
     });
     
   }
-  /* Set lang jp */
-  public setLangJP() {
-    this.$store.dispatch("changeLang", "ja");
-  }
-  /* Set lang us */
-  public setLangUS() {
-    this.$store.dispatch("changeLang", "en");
-  }
-
   /* Reset form */
   public onReset(evt: any) {
     evt.preventDefault();
@@ -161,10 +140,5 @@ export default class FormComponent extends Vue {
   .input-small {
     width: 60% !important;
   }
-}
-#lang {
-  color: #fff;
-  background-color: white !important;
-  border-color: #6c757d;
 }
 </style>
