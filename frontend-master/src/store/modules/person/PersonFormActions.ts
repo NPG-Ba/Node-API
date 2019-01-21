@@ -11,8 +11,15 @@ export function save(store: ActionContext<PersonFormState, any>,
    store.commit('setProcessing', true);
     return new PersonService().save(formData)
     .then((resp) => {
-        // Thêm mới thành công thì sẽ làm TODO
-        store.commit('add', resp.data.data);
+        // Add new record
+       if(resp.status===200)
+       {
+        reloadPerson(store)
+       }
+       if(resp.status === 501)
+       {
+           // Yêu cầu nhập lại dữ liệu
+       }
     }).catch(e => {
         // Nếu sinh lỗi 
         index.push('/server-error')
@@ -24,7 +31,13 @@ export function upAge(store: ActionContext<PersonFormState, any>, params?: any) 
         // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
         return new PersonService().up(params).then((resp) => {
             // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
-            store.commit('setTableUpAge', params[1]);
+            if(resp.status===200){
+                store.commit('setTableUpAge', params[1]);
+            }
+            if(resp.status === 501)
+               {
+                   // Yêu cầu nhập lại dữ liệu
+               }
         }).catch(e => {
             // Nếu sinh lỗi 
             index.push('/server-not-found')
@@ -37,7 +50,12 @@ export function downAge(store: ActionContext<PersonFormState, any>, params?: any
     // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
     return new PersonService().down(params).then((resp) => {
         // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
-        store.commit('setTableDownAge', params[1]);
+        if(resp.status===200){
+            store.commit('setTableDownAge', params[1]);
+        }
+        if(resp.status===501){
+             // Yêu cầu nhập lại dữ liệu
+        }
     }).catch(e => {
         // Nếu sinh lỗi 
         index.push('/server-not-found')
@@ -51,7 +69,12 @@ export function deletePerson(store: ActionContext<PersonFormState, any>, params?
     // store.commit('DELETE_PARTICLE_DATA', 'Deleting all particles');
     return new PersonService().delete(params).then((resp) => {
         // Xóa thành công thì sẽ làm TODO lấy id record mới xóa
-        store.commit('deletePerson', params[1]);
+        if(resp.status===200){
+            reloadPerson(store);
+        }
+        if(resp.status===501){
+             // Yêu cầu nhập lại dữ liệu
+        }
     }).catch(e => {
         // Nếu sinh lỗi 
         index.push('/server-not-found')
@@ -59,6 +82,30 @@ export function deletePerson(store: ActionContext<PersonFormState, any>, params?
         console.log('delete')
     })
 }
+export function reloadPerson(store: ActionContext<PersonFormState, any>){
+    new PersonService().init('')
+    .then((resp) => {
+       if(resp.status ===200){
+            if((parseInt(resp.data.pages) <=1)){
+                store.commit('setMore', true);
+            }else{
+                store.commit('append', resp.data.data);
+                store.commit('setTotalPage', resp.data.pages);
+                store.commit('setCurrentPage', 1);
+                store.commit('setIdMin', resp.data.data[resp.data.data.length - 1].id);
+            }
+       }
+       if(resp.status===204){
+        // No data
+       }
+    }).catch(e => {
+        // Redirect Url Error 500
+        index.push('/server-error')
+        
+    }).finally(() => {
+        store.commit('setProcessing', false);
+    })
+   }
 export default {
     save,
     upAge,

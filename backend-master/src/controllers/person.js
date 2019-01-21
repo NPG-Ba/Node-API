@@ -19,15 +19,14 @@ module.exports = {
       const pages = Math.ceil(parseInt(totalRows) / parseInt(limit))
       // Total page
       offset = limit * (page - 1)
-      PersonService.getAllPerson(limit, offset).then((emp) => {
+      PersonService.getAllPerson(limit, offset).then((person) => {
         res.status(CodeAPI[200]).send({
-          data: emp,
-          length: emp.length,
+          data: person,
+          length: person.length,
           pages: pages
         })
       }, () => {
         res.status(CodeAPI[204]).send({
-          message: 'No data',
           data: {}
         })
       })
@@ -45,29 +44,26 @@ module.exports = {
     let offset = 0
     // page number current
     let id = parseInt(req.params.id)
-    let page = parseInt(req.params.page)
-    // Gọi service
+    // Call service
     if ((id === 0)) {
-      PersonService.getAllPerson(limit, offset).then((dataPerson) => {
+      PersonService.getAllPerson(limit, offset).then((people) => {
         res.status(CodeAPI[200]).send({
-          data: dataPerson,
-          length: dataPerson.length
+          data: people,
+          length: people.length
         })
       }, () => {
         res.status(CodeAPI[204]).send({
-          message: 'No data',
           data: {}
         })
       })
     } else {
-      PersonService.getAllPersonWhereById(limit, offset, id).then((dataPerson) => {
+      PersonService.getAllPersonWhereById(limit, offset, id).then((people) => {
         res.status(CodeAPI[200]).send({
-          data: dataPerson,
-          length: dataPerson.length
+          data: people,
+          length: people.length
         })
       }, () => {
         res.status(CodeAPI[204]).send({
-          message: 'No data',
           data: {}
         })
       })
@@ -76,8 +72,8 @@ module.exports = {
 
   // add a new employeee
 
-  addNewPerson: (rep, res) => {
-    let data = rep.body
+  addNewPerson: (req, res) => {
+    let data = req.body
     // validate input
     let result = Joi.validate(data, Validate.schema, (err, _value) => {
       if (err) return false
@@ -97,34 +93,30 @@ module.exports = {
   },
 
   // delete employee
-  deletePerson: (rep, res) => {
+  deletePerson: (req, res) => {
     // get id
-    let id = parseInt(rep.params.id)
+    let id = parseInt(req.params.id)
     PersonService.getPersonById(id).then((data) => {
-      if (data.length > 0) {
-        PersonService.deletePersonById(id).then(() => {
-          res.status(CodeAPI[200]).send()
-        }, () => {
-          res.status(CodeAPI[501]).send()
-        })
-      } else {
-        res.status(CodeAPI[404]).send()
-      }
+      PersonService.deletePersonById(id).then(() => {
+        res.status(CodeAPI[200]).send()
+      }, () => {
+        res.status(CodeAPI[501]).send()
+      })
     }, () => {
-      res.status(CodeAPI[500]).send()
+      res.status(CodeAPI[404]).send()
     })
   },
 
   // update age person id
-  upAgePerson: (rep, res) => {
-    let id = parseInt(rep.params.id)
+  upAgePerson: (req, res) => {
+    let id = parseInt(req.params.id)
     PersonService.getPersonById(id).then((data) => {
       // No data
       if (data.length === 0) {
         res.status(CodeAPI[500]).send()
       } else {
-        let age = parseInt(data[0].dataValues.age + 1)
-        if (age < 150) {
+        let age = parseInt(data[0].dataValues.age) + 1
+        if (age <= 150) {
           PersonService.updatePerson(id, age).then(() => {
             res.status(CodeAPI[200]).send()
           }, () => {
@@ -135,20 +127,20 @@ module.exports = {
         }
       }
     }, () => {
-      res.status(CodeAPI[500]).send()
+      res.status(CodeAPI[501]).send()
     })
   },
 
   // down age person id
-  downAgePerson: (rep, res) => {
-    let id = parseInt(rep.params.id)
+  downAgePerson: (req, res) => {
+    let id = parseInt(req.params.id)
     PersonService.getPersonById(id).then((data) => {
       // No data
       if (data.length === 0) {
         res.status(CodeAPI[500]).send()
       } else {
-        let age = parseInt(data[0].dataValues.age - 1)
-        if (age > 15) {
+        let age = parseInt(data[0].dataValues.age) - 1
+        if (age >= 15) {
           PersonService.updatePerson(id, age).then(() => {
             res.status(CodeAPI[200]).send()
           }, () => {
@@ -159,7 +151,7 @@ module.exports = {
         }
       }
     }, () => {
-      res.status(CodeAPI[500]).send()
+      res.status(CodeAPI[501]).send()
     })
   }
 }

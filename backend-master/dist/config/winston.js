@@ -10,12 +10,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
-require('winston-daily-rotate-file'); // kiểm tra nếu tồn tại
+require('winston-daily-rotate-file'); // check exist folder
 
 
 if (!_FS.existsSync(_application.default.folder.logDir)) {
   _FS.mkdirSync(_application.default.folder.logDir);
-} // Cấu hình file log
+} // setting file log
 
 
 var transport = new winston.transports.DailyRotateFile({

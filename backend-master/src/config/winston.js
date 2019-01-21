@@ -4,12 +4,12 @@ import * as winston from 'winston'
 
 require('winston-daily-rotate-file')
 
-// kiểm tra nếu tồn tại
+// check exist folder
 if (!_FS.existsSync(AppConf.folder.logDir)) {
   _FS.mkdirSync(AppConf.folder.logDir)
 }
 
-// Cấu hình file log
+// setting file log
 var transport = new (winston.transports.DailyRotateFile)({
 
   filename: `${AppConf.folder.logDir}`.concat(AppConf.file.filename),

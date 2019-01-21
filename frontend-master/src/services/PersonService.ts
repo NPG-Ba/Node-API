@@ -12,13 +12,11 @@ export class PersonService {
     }
     public more(params: any): Promise<any> {
         
-        return ApiService.get(`/person/`+ params, {
-            params,
+        return ApiService.get('/person/'+ params, {
         });
     }
     public delete(params: any): Promise<any> {
         return ApiService.delete('/person/' + params[0], {
-            params,
         });
     }
 
@@ -30,6 +28,11 @@ export class PersonService {
 
     public down(params: any): Promise<any> {
         return ApiService.put('/person/'+parseInt(params[0])+'/age-down',{
+            params,
+        });
+    }
+    public Logs(params: any): Promise<any> {
+        return ApiService.put('/person/'+ parseInt(params[0])+'/age-down',{
             params,
         });
     }

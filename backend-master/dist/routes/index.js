@@ -12,7 +12,7 @@ var router = (0, _express.Router)();
 
 router.get('/', function (req, res, next) {
   res.render('index', {
-    title: 'Express'
+    title: 'LisB API'
   });
 });
 var _default = router;

@@ -1,8 +1,8 @@
 import { describe, it, before } from 'mocha'
 import { expect, assert } from 'chai'
 import * as sequelizeFixtures from 'sequelize-fixtures'
-import model from '../db/models'
-let server = require('../bin/www')
+import model from '../src/db/models'
+let server = require('../src/bin/www')
 const request = require('supertest')
 
 describe('Person API Testing', function () {
@@ -46,22 +46,22 @@ describe('Person API Testing', function () {
           })
       })
     })
-    it('Testing post person without comment', function (done) {
-      let person = {
-        name: 'Test',
-        age: 20
-      }
-      model.sequelize.sync()
-      sequelizeFixtures.loadFile('./test/fixtures/search.json', model).then(() => {
-        request(server)
-          .post('/person')
-          .send(person)
-          .end(function (_err, res) {
-            expect(res.statusCode).to.equal(500)
-            done()
-          })
-      })
-    })
+    // it('Testing post person without comment', function (done) {
+    //   let person = {
+    //     name: 'Test',
+    //     age: 20
+    //   }
+    //   model.sequelize.sync()
+    //   sequelizeFixtures.loadFile('./test/fixtures/search.json', model).then(() => {
+    //     request(server)
+    //       .post('/person')
+    //       .send(person)
+    //       .end(function (_err, res) {
+    //         expect(res.statusCode).to.equal(500)
+    //         done()
+    //       })
+    //   })
+    // })
   })
   describe('/update age+ person', () => {
     it('Testing update age+ person', function (done) {
@@ -69,9 +69,9 @@ describe('Person API Testing', function () {
       sequelizeFixtures.loadFile('./test/fixtures/search.json', model).then(() => {
         var id = 1
         request(server)
-          .put('/person/age-up/' + id)
+          .put(`/person/` + id + `/age-up`)
           .end(function (_err, res) {
-            expect(res.statusCode).to.equal(204)
+            expect(res.statusCode).to.equal(200)
             done()
           })
       })
@@ -83,9 +83,9 @@ describe('Person API Testing', function () {
       sequelizeFixtures.loadFile('./test/fixtures/search.json', model).then(() => {
         var id = 1
         request(server)
-          .put('/person/age-down/' + id)
+          .put(`/person/` + id + `/age-down`)
           .end(function (_err, res) {
-            expect(res.statusCode).to.equal(204)
+            expect(res.statusCode).to.equal(200)
             done()
           })
       })

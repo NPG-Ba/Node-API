@@ -1,44 +1,52 @@
 {
   "common": {
-    "select_lang": "言語"
-  },
-  "form": {
-    "title": "個人用フォーム",
-    "buttons": {
-      "add": "登録",
-      "cancel": "キャンセル"
+    "select_lang": "言語",
+    "form": {
+      "title": "個人用フォーム",
+      "buttons": {
+        "add": "登録",
+        "cancel": "キャンセル"
+      },
+      "input": {
+        "name": "名前",
+        "age": "年齢",
+        "comment": "コメント"
+      },
+      "messages": {
+        "name_required": "名前を記入してください。",
+        "age_required": "年齢を記入してください。",
+        "comment_required": "コメントを記入してください。"
+      }
     },
-    "input": {
-      "name": "名前",
-      "age": "年齢",
-      "comment": "コメント"
+    "table": {
+      "button": {
+        "delete": "削除"
+      },
+      "no_data" :"No data"
     },
-    "messages": {
-      "name_required": "名前を記入してください。",
-      "age_required": "年齢を記入してください。",
-      "comment_required": "コメントを記入してください。"
-    }
-  },
-  "table": {
     "button": {
-      "delete": "削除"
-    }
-  },
-  "button": {
-    "more": "さらに表示"
-  },
-  "header": {
-    "name_age": "名前(年齢)",
-    "comment": "コメント",
-    "action": "アクション"
-  },
-  "dialog" : {
-    "title" : "削除しますか？",
-    "oke"   : "同意",
-    "cancel" : "キャンセル"
-  },
-  "message":{
-    "save" : "保存しました。",
-    "error" :"保存に失敗しました。"
+      "more": "さらに表示"
+    },
+    "header": {
+      "name_age": "名前(年齢)",
+      "comment": "コメント",
+      "action": "アクション"
+    },
+    "dialog" : {
+      "title_confirm" : "削除しますか？",
+      "title_del" : "削除しますか？",
+      "oke"   : "同意",
+      "cancel" : "キャンセル"
+    },
+    "respons":{
+      "200" : "保存しました。",
+      "500" : "保存に失敗しました。",
+      "400" : "Yêu cầu xấu",
+      "204" : "No data",
+      "501" : "Không thực hiện được",
+      "404" : "Không tìm thấy",
+      "599" : "Lỗi internet"
+    },
+    "loading" :"Loading .. "
   }
 }

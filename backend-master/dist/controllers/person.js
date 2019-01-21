@@ -30,15 +30,14 @@ module.exports = {
       var pages = Math.ceil(parseInt(totalRows) / parseInt(limit)); // Total page
 
       offset = limit * (page - 1);
-      PersonService.getAllPerson(limit, offset).then(function (emp) {
+      PersonService.getAllPerson(limit, offset).then(function (person) {
         res.status(_codes.default[200]).send({
-          data: emp,
-          length: emp.length,
+          data: person,
+          length: person.length,
           pages: pages
         });
       }, function () {
         res.status(_codes.default[204]).send({
-          message: 'No data',
           data: {}
         });
       });
@@ -54,38 +53,35 @@ module.exports = {
 
     var offset = 0; // page number current
 
-    var id = parseInt(req.params.id);
-    var page = parseInt(req.params.page); // Gọi service
+    var id = parseInt(req.params.id); // Call service
 
     if (id === 0) {
-      PersonService.getAllPerson(limit, offset).then(function (dataPerson) {
+      PersonService.getAllPerson(limit, offset).then(function (people) {
         res.status(_codes.default[200]).send({
-          data: dataPerson,
-          length: dataPerson.length
+          data: people,
+          length: people.length
         });
       }, function () {
         res.status(_codes.default[204]).send({
-          message: 'No data',
           data: {}
         });
       });
     } else {
-      PersonService.getAllPersonWhereById(limit, offset, id).then(function (dataPerson) {
+      PersonService.getAllPersonWhereById(limit, offset, id).then(function (people) {
         res.status(_codes.default[200]).send({
-          data: dataPerson,
-          length: dataPerson.length
+          data: people,
+          length: people.length
         });
       }, function () {
         res.status(_codes.default[204]).send({
-          message: 'No data',
           data: {}
         });
       });
     }
   },
   // add a new employeee
-  addNewPerson: function addNewPerson(rep, res) {
-    var data = rep.body; // validate input
+  addNewPerson: function addNewPerson(req, res) {
+    var data = req.body; // validate input
 
     var result = Joi.validate(data, Validate.schema, function (err, _value) {
       if (err) return false;
@@ -105,34 +101,30 @@ module.exports = {
     }
   },
   // delete employee
-  deletePerson: function deletePerson(rep, res) {
+  deletePerson: function deletePerson(req, res) {
     // get id
-    var id = parseInt(rep.params.id);
+    var id = parseInt(req.params.id);
     PersonService.getPersonById(id).then(function (data) {
-      if (data.length > 0) {
-        PersonService.deletePersonById(id).then(function () {
-          res.status(_codes.default[200]).send();
-        }, function () {
-          res.status(_codes.default[501]).send();
-        });
-      } else {
-        res.status(_codes.default[404]).send();
-      }
+      PersonService.deletePersonById(id).then(function () {
+        res.status(_codes.default[200]).send();
+      }, function () {
+        res.status(_codes.default[501]).send();
+      });
     }, function () {
-      res.status(_codes.default[500]).send();
+      res.status(_codes.default[404]).send();
     });
   },
   // update age person id
-  upAgePerson: function upAgePerson(rep, res) {
-    var id = parseInt(rep.params.id);
+  upAgePerson: function upAgePerson(req, res) {
+    var id = parseInt(req.params.id);
     PersonService.getPersonById(id).then(function (data) {
       // No data
       if (data.length === 0) {
         res.status(_codes.default[500]).send();
       } else {
-        var age = parseInt(data[0].dataValues.age + 1);
+        var age = parseInt(data[0].dataValues.age) + 1;
 
-        if (age < 150) {
+        if (age <= 150) {
           PersonService.updatePerson(id, age).then(function () {
             res.status(_codes.default[200]).send();
           }, function () {
@@ -143,20 +135,20 @@ module.exports = {
         }
       }
     }, function () {
-      res.status(_codes.default[500]).send();
+      res.status(_codes.default[501]).send();
     });
   },
   // down age person id
-  downAgePerson: function downAgePerson(rep, res) {
-    var id = parseInt(rep.params.id);
+  downAgePerson: function downAgePerson(req, res) {
+    var id = parseInt(req.params.id);
     PersonService.getPersonById(id).then(function (data) {
       // No data
       if (data.length === 0) {
         res.status(_codes.default[500]).send();
       } else {
-        var age = parseInt(data[0].dataValues.age - 1);
+        var age = parseInt(data[0].dataValues.age) - 1;
 
-        if (age > 15) {
+        if (age >= 15) {
           PersonService.updatePerson(id, age).then(function () {
             res.status(_codes.default[200]).send();
           }, function () {
@@ -167,7 +159,7 @@ module.exports = {
         }
       }
     }, function () {
-      res.status(_codes.default[500]).send();
+      res.status(_codes.default[501]).send();
     });
   }
 };

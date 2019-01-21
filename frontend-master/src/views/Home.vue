@@ -13,6 +13,7 @@ import FormComponent from '@/components/FormComponent.vue';
 import ListTable from '@/components/ListTable.vue';
 import Navbar from '@/components/Navbar.vue';
 
+
 @Component({
   components: {
     FormComponent,
@@ -20,6 +21,8 @@ import Navbar from '@/components/Navbar.vue';
 		Navbar
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+
+}
 </script>
 
