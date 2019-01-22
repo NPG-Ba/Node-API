@@ -11,8 +11,8 @@
                     <b-collapse is-nav id="nav_collapse">
                             <!-- Right aligned nav items -->
                             <b-navbar-nav class="ml-auto">
-                                <b-button size="sm" style="background-color: #f8f9fa" class="my-2 my-sm-0 lang" @click="setLang('en')"><flag iso="us"/></b-button>
-                                <b-button size="sm" style="background-color: #f8f9fa" class="my-2 my-sm-0 lang" @click="setLang('ja')"><flag iso="jp"/></b-button>
+                                <b-button size="sm" style="background-color: #f8f9fa" class="my-2 my-sm-0 lang" @click="setLang('en')"><img src="/img/icons/america.png"></b-button>
+                                <b-button size="sm" style="background-color: #f8f9fa" class="my-2 my-sm-0 lang" @click="setLang('ja')"><img src="/img/icons/japan.png"></b-button>
                             </b-navbar-nav>
                     </b-collapse>
                 </b-collapse>
@@ -24,7 +24,6 @@
 
 <script lang='ts'>
 import { Component, Prop, Vue } from "vue-property-decorator";
-
 @Component
 export default class NavbarComponent extends Vue {
   

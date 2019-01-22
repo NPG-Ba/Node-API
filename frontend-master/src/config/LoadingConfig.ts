@@ -3,5 +3,7 @@ export enum LoadingConfig {
     BgColor= '#ffffff',
     Height= 60,
     Width= 60,
-    Timeout= 1000//ms
+    TimeOut_Slow= 1000,
+    TimeOut_Normal =500,
+    TimeOut_Fast= 400//ms
 }

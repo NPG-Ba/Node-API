@@ -17,7 +17,6 @@
     "vee-validate": "^2.1.5",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
-    "vue-flag-icon": "^1.0.6",
     "vue-full-loading": "^1.2.1",
     "vue-i18n": "^8.0.0",
     "vue-loading-overlay": "^3.1.1",

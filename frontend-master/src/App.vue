@@ -91,6 +91,15 @@ table {
 .table-responsive tbody tr td:nth-child(3){
   text-align: right!important;  
 }
+.table-responsive tbody tr td:nth-child(2) pre{
+    max-height: 75px;
+    overflow: hidden;
+}
+.table-responsive tbody tr td:nth-child(2) pre:hover{
+
+    overflow-y: auto;
+    display: block;
+}
 .table-responsive thead th {
     vertical-align: bottom;
 }
@@ -106,12 +115,15 @@ border-top: 0px solid #dee2e6 !important;
 .table-responsive thead{
   display: none;
 }
-.table-responsive:hover{
+.table-responsive{
   overflow-y: scroll;
 }
 .table-responsive{
   height: 300px;
   margin-bottom: 10px;
+}
+p.help.is-danger {
+    color: red;
 }
   pre {
   white-space: pre-wrap;       /* css-3 */
@@ -160,5 +172,9 @@ input:valid {
 }
 input:invalid {
   border-color: red;
+}
+.table-responsive{
+  height: 640px;
+  margin-bottom: 50px;
 }
 </style>

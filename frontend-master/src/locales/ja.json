@@ -22,7 +22,11 @@
       "button": {
         "delete": "削除"
       },
-      "no_data" :"No data"
+      "page":{
+        "showing" :"表示中",
+        "of" :"の",
+        "page":"ページ"
+      }
     },
     "button": {
       "more": "さらに表示"
@@ -33,7 +37,7 @@
       "action": "アクション"
     },
     "dialog" : {
-      "title_confirm" : "削除しますか？",
+      "title_confirm" : "保存しますか？",
       "title_del" : "削除しますか？",
       "oke"   : "同意",
       "cancel" : "キャンセル"
@@ -46,7 +50,6 @@
       "501" : "Không thực hiện được",
       "404" : "Không tìm thấy",
       "599" : "Lỗi internet"
-    },
-    "loading" :"Loading .. "
+    }
   }
 }

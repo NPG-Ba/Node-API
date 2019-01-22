@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import ER404 from './views/ErrorPage/404.vue';
+import ER500 from './views/ErrorPage/500.vue';
 
 Vue.use(Router);
 
@@ -17,13 +19,13 @@ export default new Router({
       path: '/server-error',
       name: 'server-error',
       // serve error
-      component: () => import(/* webpackChunkName: "500" */ './views/ErrorPage/500.vue'),
+      component:ER500,
     },
     {
       path: '/server-not-found',
       name: 'server-not-found',
       // serve not found
-      component: () => import(/* webpackChunkName: "404" */ './views/ErrorPage/404.vue'),
+      component: ER404,
     }
   ],
 });

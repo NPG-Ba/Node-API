@@ -1,17 +1,12 @@
 <template>
   <div>
-    <div class="card vld-parent mb-3">
-      <loading :active.sync="isLoadingOverlay" 
+    <loading :active.sync="isOverlayLoading" 
         :can-cancel="true" 
         :on-cancel="onCancel"
-        :height="height"
-        :width="width"
-        :color="color"
-        :background-color="bgColor"
         :is-full-page="fullPage">
-      </loading>
-    </div>
-    <h3 style="text-align: left;margin-bottom: 20px;margin-top: 10px;">{{$t('common.form.title')}}</h3>
+    </loading>
+    <br>
+    <br>
     <b-alert :show="dismissCountDown" dismissible variant="warning"
       @dismissed="dismissCountDown=0"
       @dismiss-count-down="countDownChanged">{{$t('common.respons.200')}}</b-alert>
@@ -33,7 +28,7 @@
       <div class="form-group row">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label">{{$t('common.form.input.comment')}}</label>
         <div class="col-sm-10">
-          <b-form-textarea id="textarea1" v-model="comment" name="comment" :rows="2" :max-rows="4"></b-form-textarea>
+          <b-form-textarea id="textarea1" v-model="comment" name="comment" :rows="3" :max-rows="6"></b-form-textarea>
         </div>
       </div>
       <div class="form-group row">
@@ -47,10 +42,27 @@
         </div>
       </div>
     </form>
-    <b-modal id="modalsm" size="sm" v-bind:ok-title="$t('common.dialog.oke')" v-bind:cancel-title="$t('common.dialog.cancel')"
+    <b-modal id="modalsm" size="lg" no-fade centered v-bind:ok-title="$t('common.dialog.oke')" v-bind:cancel-title="$t('common.dialog.cancel')"
       @hidden="handleHidden()"
       v-bind:title="$t('common.dialog.title_confirm')"
-      @ok="handleOk()"></b-modal>
+      @ok="handleOk()">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">{{$t('common.form.input.name')}}</th>
+              <th scope="col">{{$t('common.form.input.age')}}</th>
+              <th style="max-height: 500px; display: inline-block; overflow: auto;" scope="col">{{$t('common.form.input.comment')}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{this.name}}</td>
+              <td>{{this.age }}</td>
+              <td>{{this.comment }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </b-modal>
     <hr>
   </div>
 </template>
@@ -64,19 +76,18 @@ import { Person } from "@/models/Person";
 import { MyHttpResponse } from "@/models/http/Response";
 import { FormResponse } from "@/models/http/FormResponse";
 import { AppConf } from "@/config/AppConfig";
-//import { LoadingConfig } from "@/config/LoadingConfig";
+import { LoadingConfig } from "@/config/LoadingConfig";
 import { Security } from "@/unit/Security";
+const Loading:any = require('vue-loading-overlay');
+    // Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
 import axios from "axios";
 import { __values } from "tslib";
 import { isNumber } from "util";
 const namespace: string = "personForm";
-    // Import component
-import Loading from 'vue-loading-overlay';
-    // Import stylesheet
-import 'vue-loading-overlay/dist/vue-loading.css';
 
 @Component({
-  components: { ValidationObserver, Loading}
+  components: { ValidationObserver,Loading}
 })
 export default class FormComponent extends Vue {
   public show = true;
@@ -84,10 +95,12 @@ export default class FormComponent extends Vue {
   /*  Form person*/
   public age: number = 0;
   public comment: string = AppConf.Empty;
-
   /* Alert */
   private dismissSecs = parseInt(AppConf.DismissSecs.toString());
   private dismissCountDown = 0;
+// Loading
+  private fullPage = true
+  private isOverlayLoading = false
 
   get name() {
     return this.$store.state.personForm.form.name;
@@ -95,19 +108,17 @@ export default class FormComponent extends Vue {
   set name(val: string) {
     this.$store.commit("setName", val);
   }
-  //public show = false
-  public label= 'Loading...'
   public handleHidden() {
-    this.name = AppConf.Empty;
-    this.age = 0;
-    this.comment = AppConf.Empty;
-    this.$validator.reset();
+    // cancel modal
   }
+  // Ok modal
   public handleOk() {
-    this.loadingOverlay();
+    this.isOverlayLoading = true;
+    this.savePerson();
+    this.TimeOutLoading(LoadingConfig.TimeOut_Normal)
   }
-  /* Submit  form */
-  public onSubmit() {
+  /* Save person */
+  public savePerson() {
     this.$validator.validateAll().then(result => {
       if (result) {
         this.$store
@@ -134,6 +145,15 @@ export default class FormComponent extends Vue {
       }
     });
   }
+ // Loading  
+ private TimeOutLoading(Time :number) {
+      setTimeout(() => {
+       this.isOverlayLoading = false
+      },Time)
+  }
+  private onCancel() {
+    console.log('User cancelled the loader.')
+  }
   /* Reset form */
   public onReset(evt: any) {
     evt.preventDefault();
@@ -150,26 +170,6 @@ export default class FormComponent extends Vue {
   /* Alert */
   public countDownChanged(dismissCountDown: any) {
     this.dismissCountDown = dismissCountDown;
-  }
-
-  // Loading
-    private isLoadingOverlay = false
-    private fullPage= true
-    private canCancel= false
-    private useSlot= false
-    private color= '#007bff'
-    private bgColor= '#ffffff'
-    private height= 60
-    private width= 60
-    private timeout= 1000//ms
-
-  private loadingOverlay() {
-      this.isLoadingOverlay = true;
-        // call save
-          this.onSubmit()
-      setTimeout(() => {
-        this.isLoadingOverlay = false
-      },this.timeout)
   }
 }
 </script>

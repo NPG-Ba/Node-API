@@ -1,16 +1,20 @@
 <template>
-
   <div class="container" style="margin-top:10px;">
+     <loading :active.sync="isOverlayLoading" 
+        :can-cancel="true" 
+        :on-cancel="onCancel"
+        :is-full-page="fullPage">
+    </loading>
+    <p style="font-style:italic">{{$t('common.table.page.showing')}} {{this.currentPage}} {{$t('common.table.page.of')}} {{this.maxPage}} {{$t('common.table.page.page')}}</p>
     <b-table responsive :fixed="fixed"  :hover="hover" :items="items" :fields="fields1">
       <template slot="nameage" slot-scope="data">{{data.item.name}} ({{data.item.age}})</template>
       <pre slot="comment" slot-scope="data" v-html="data.value"></pre>
       <template slot="action" slot-scope="props">
-        <b-button :disabled="(props.item.age >= 150) ? true : false" size="sm" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)" >+1</b-button>
-        <b-button :disabled="(props.item.age <= 15) ? true : false" size="sm" class="btn btn-primary btn-sm" @click="downAge(props)">-1</b-button>
+        <b-button :disabled="(props.item.age >= 150)" size="sm" class="btn btn-primary btn-sm btn-addold" @click="upAge(props)" >+1</b-button>
+        <b-button :disabled="(props.item.age <= 15)" size="sm" class="btn btn-primary btn-sm" @click="downAge(props)">-1</b-button>
         <b-button b-btn v-b-modal.modalPrevent  size="sm"  v-on:click="info(props.item, props.index)"  class="mr-1 btn btn-danger">{{$t('common.table.button.delete')}}</b-button>
       </template>
     </b-table>
-    <p class="badge badge-light">Showing {{this.currentPage}} of {{this.maxPage}} page</p>
     <div class="form-group row">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-5" style="text-align: right">
@@ -18,18 +22,20 @@
         </div>
       </div>
     <!--Modal-->
-    <b-modal id="modalPrevent" no-fade centered ref="modal"  v-bind:ok-title="$t('common.dialog.oke')" v-bind:title="$t('common.dialog.title_del')" v-bind:cancel-title="$t('common.dialog.cancel')"  @ok="handleOk(modalInfo.content,$event,modalInfo.title)"> 
+    <b-modal id="modalPrevent" size="lg" no-fade centered ref="modal"  v-bind:ok-title="$t('common.dialog.oke')" v-bind:title="$t('common.dialog.title_del')" v-bind:cancel-title="$t('common.dialog.cancel')"  @ok="handleOk(modalInfo.content,$event,modalInfo.title)"> 
         <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">{{$t('common.form.input.name')}}</th>
               <th scope="col">{{$t('common.form.input.age')}}</th>
+              <th style="max-height: 500px; display: inline-block; overflow: auto;" scope="col">{{$t('common.form.input.comment')}}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{ modalInfo.content.name }}</td>
               <td>{{ modalInfo.content.age }}</td>
+              <td>{{ modalInfo.content.comment }}</td>
             </tr>
           </tbody>
         </table>
@@ -46,9 +52,13 @@ import { AppConf } from "@/config/AppConfig";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import index from "@/store";
 import i18n from "@/i18n";
+const Loading:any = require('vue-loading-overlay');
+    // Import stylesheet
+import 'vue-loading-overlay/dist/vue-loading.css';
+import { LoadingConfig } from '@/config/LoadingConfig';
 
 @Component({
-  components: { PulseLoader}
+  components: { PulseLoader,Loading}
 })
 export default class ListTableComponent extends Vue {
 
@@ -81,6 +91,10 @@ export default class ListTableComponent extends Vue {
 
   public saveMessage: string = AppConf.Empty;
 
+// Loading
+  private fullPage = true
+  private isOverlayLoading = false
+
   public resetModal() {
     this.$root.$emit(AppConf.hiddenModal.toString(), "modalInfo");
   }
@@ -94,7 +108,9 @@ export default class ListTableComponent extends Vue {
 
   public handleOk(data: any, evt: any, index: any) {
     /* Delete */
+    this.isOverlayLoading = true;
     this.$store.dispatch("deletePerson", [data.id, parseInt(index)]);
+    this.TimeOutLoading(LoadingConfig.TimeOut_Slow)
     /* Hide modal */
     this.$root.$emit(AppConf.hiddenModal.toString(), "modalInfo");
   }
@@ -129,23 +145,39 @@ export default class ListTableComponent extends Vue {
 
   /* Init table  */
   public mounted() {
+    this.isOverlayLoading = true;
     this.$store.dispatch("init");
+    this.TimeOutLoading(LoadingConfig.TimeOut_Slow)
   }
 
   /* Method update age+ with id */
   public upAge(data: any) {
+    this.isOverlayLoading = true;
     this.$store.dispatch("upAge", [data.item.id, data.index,]);
+    this.TimeOutLoading(LoadingConfig.TimeOut_Slow)
   }
 
   /* Method update age- with id */
   public downAge(data: any) {
+    this.isOverlayLoading = true;
     this.$store.dispatch("downAge", [data.item.id, data.index]);
+    this.TimeOutLoading(LoadingConfig.TimeOut_Slow)
   }
 
   /* Get more data with id ang page */
   public morePerson(event: any) {
+    this.isOverlayLoading = true;
     event.preventDefault();
     this.$store.dispatch("morePerson", this.idMin);
+    this.TimeOutLoading(LoadingConfig.TimeOut_Slow)
+  }
+  private onCancel() {
+    console.log('User cancelled the loader.')
+  }
+  private TimeOutLoading(Time :number){
+    setTimeout(() => {
+      this.isOverlayLoading = false
+    },Time)
   }
 }
 </script>

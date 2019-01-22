@@ -22,7 +22,11 @@
       "button": {
         "delete": "Delete"
       },
-      "no_data" :"No data"
+      "page":{
+      "showing " :"Showing",
+      "of" :"of",
+      "page":"page"
+    }
     },
     "button": {
       "more": "More"
@@ -46,7 +50,6 @@
       "501" : "Không thực hiện được",
       "404" : "Không tìm thấy",
       "599" : "Lỗi internet"
-    },
-    "loading" :"Loading .. "
+    }
   }
 }
